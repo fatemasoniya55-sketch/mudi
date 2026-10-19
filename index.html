@@ -1,0 +1,3952 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MudiMobile — দোকান ম্যানেজার</title>
+  <style>
+    :root {
+      --green: #16834a;
+      --green-dark: #086b39;
+      --green-soft: #e9f7ef;
+      --mint: #f3faf5;
+      --ink: #17231c;
+      --muted: #738078;
+      --line: #e8eee9;
+      --white: #fff;
+      --orange: #e99a24;
+      --red: #d94848;
+      --shadow: 0 5px 18px rgba(18, 68, 39, .07);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: #f5f8f5;
+      color: var(--ink);
+      font-family: Inter, "Noto Sans Bengali", "Hind Siliguri", system-ui, -apple-system, sans-serif
+    }
+
+    button,
+    input,
+    select {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    .app {
+      max-width: 520px;
+      min-height: 100vh;
+      margin: auto;
+      background: #fbfdfb;
+      position: relative;
+      padding-bottom: 94px;
+      box-shadow: 0 0 35px #173c2410
+    }
+
+    .topbar {
+      padding: 22px 20px 16px;
+      background: #e7f6ed;
+      border-radius: 0 0 28px 28px
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px
+    }
+
+    .shop {
+      display: flex;
+      align-items: center;
+      gap: 11px
+    }
+
+    .shop-logo {
+      width: 44px;
+      height: 44px;
+      background: var(--green);
+      color: white;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 800;
+      box-shadow: 0 5px 12px #16834a30
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      color: #5f7868;
+      margin-bottom: 2px
+    }
+
+    .shop h1 {
+      font-size: 19px;
+      margin: 0;
+      font-weight: 750;
+      letter-spacing: -.3px
+    }
+
+    .settings-btn {
+      border: 0;
+      background: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: var(--green);
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 12px rgba(22, 131, 74, .12)
+    }
+
+    .settings-btn .gear {
+      font-size: 20px;
+      line-height: 1
+    }
+
+    .date-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 22px;
+      font-size: 13px;
+      color: #5e7566
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: #20a75b;
+      border-radius: 50%
+    }
+
+    .dot.closed {
+      background: #d94848
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .toggle-row:last-child {
+      border-bottom: 0
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 28px
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #dfe9e2;
+      border-radius: 999px;
+      transition: .25s
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      top: 4px;
+      background: #fff;
+      border-radius: 50%;
+      transition: .25s;
+      box-shadow: 0 3px 8px rgba(12, 32, 18, .12)
+    }
+
+    .switch input:checked+.slider {
+      background: var(--green)
+    }
+
+    .switch input:checked+.slider:before {
+      transform: translateX(18px)
+    }
+
+    .toggle-copy {
+      flex: 1
+    }
+
+    .toggle-copy strong {
+      display: block;
+      font-size: 13px;
+      color: var(--ink)
+    }
+
+    .toggle-copy small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px
+    }
+
+    .balance {
+      display: none;
+      margin-top: 15px;
+      background: var(--green);
+      border-radius: 22px;
+      padding: 17px 18px 16px;
+      color: #fff;
+      position: relative;
+      overflow: hidden
+    }
+
+    body.home-page .balance {
+      display: block
+    }
+
+    .balance:after {
+      content: "৳";
+      position: absolute;
+      right: 15px;
+      top: -26px;
+      font-size: 115px;
+      font-weight: 800;
+      color: #ffffff12
+    }
+
+    .balance-meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px
+    }
+
+    .balance-date-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
+
+    .balance-date,
+    .balance-time {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .9);
+      font-weight: 700;
+      letter-spacing: .02em;
+      line-height: 1.2
+    }
+
+    .weather-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .13);
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      backdrop-filter: blur(4px)
+    }
+
+    .balance-label {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      color: #d8f4e2
+    }
+
+    .balance-amount {
+      position: relative;
+      z-index: 1;
+      font-size: 26px;
+      font-weight: 800;
+      margin: 6px 0 15px;
+      letter-spacing: -.7px;
+      line-height: 1.1
+    }
+
+    .balance-bottom {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .balance-note {
+      font-size: 12px;
+      color: #d8f4e2
+    }
+
+    .ghost-btn {
+      background: #fff;
+      color: var(--green-dark);
+      border: 0;
+      border-radius: 11px;
+      padding: 10px 13px;
+      font-weight: 750;
+      font-size: 13px
+    }
+
+    main {
+      padding: 20px 16px 0
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2px 2px 13px
+    }
+
+    .section-head h2 {
+      font-size: 17px;
+      margin: 0;
+      font-weight: 800
+    }
+
+    .text-btn {
+      border: 0;
+      background: transparent;
+      color: var(--green);
+      font-weight: 750;
+      font-size: 13px;
+      padding: 5px
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px
+    }
+
+    .metric {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      min-width: 0
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px
+    }
+
+    .metric-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 19px
+    }
+
+    .metric small {
+      color: var(--muted);
+      font-size: 12px
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 21px;
+      margin-top: 5px;
+      letter-spacing: -.4px
+    }
+
+    .metric .trend {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 700
+    }
+
+    .daily-ledger-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 14px;
+      text-align: left;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      box-shadow: var(--shadow)
+    }
+
+    .daily-ledger-card .metric-icon {
+      flex: 0 0 40px
+    }
+
+    .daily-ledger-copy {
+      flex: 1;
+      min-width: 0
+    }
+
+    .daily-ledger-copy strong,
+    .daily-ledger-copy small {
+      display: block
+    }
+
+    .daily-ledger-copy strong {
+      font-size: 13px
+    }
+
+    .daily-ledger-copy small {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px
+    }
+
+    .daily-ledger-arrow {
+      color: var(--green);
+      font-size: 20px;
+      font-weight: 800
+    }
+
+    .shortcuts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px
+    }
+
+    .shortcut {
+      border: 1px solid var(--line);
+      background: #f1faf4;
+      border-radius: 16px;
+      padding: 15px 6px 13px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 9px;
+      color: var(--ink);
+      min-height: 103px;
+      box-shadow: 0 2px 5px #0a4c2410
+    }
+
+    .shortcut:active {
+      transform: scale(.98)
+    }
+
+    .shortcut .ico {
+      font-size: 26px;
+      color: var(--green);
+      line-height: 1
+    }
+
+    .shortcut span:last-child {
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center
+    }
+
+    .searchbar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 0 12px;
+      margin-bottom: 12px
+    }
+
+    .searchbar span {
+      font-size: 18px;
+      color: var(--muted)
+    }
+
+    .searchbar input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      padding: 13px 0;
+      background: transparent;
+      color: var(--ink)
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      overflow: hidden;
+      box-shadow: var(--shadow)
+    }
+
+    .sale-row,
+    .product-row {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px;
+      border-bottom: 1px solid #eef2ef
+    }
+
+    .sale-row:last-child,
+    .product-row:last-child {
+      border-bottom: 0
+    }
+
+    .item-icon {
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      background: var(--mint);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex-shrink: 0
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .item-info strong {
+      display: block;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .item-info small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px
+    }
+
+    .item-price {
+      text-align: right;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap
+    }
+
+    .item-price small {
+      display: block;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 11px;
+      margin-top: 4px
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 750;
+      border-radius: 20px;
+      padding: 5px 8px;
+      background: #fff2db;
+      color: #a46500;
+      display: inline-block
+    }
+
+    .badge.red {
+      background: #fff0f0;
+      color: var(--red)
+    }
+
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: block
+    }
+
+    .page-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 2px 15px
+    }
+
+    .page-title h2 {
+      margin: 0;
+      font-size: 21px
+    }
+
+    .primary {
+      border: 0;
+      background: var(--green);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 15px;
+      font-weight: 750;
+      box-shadow: 0 5px 12px #16834a20
+    }
+
+    .secondary {
+      border: 1px solid #dce9df;
+      background: #fff;
+      color: var(--green);
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-weight: 700
+    }
+
+    .barcode-hero {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 14px;
+      padding: 16px;
+      border: 1px solid #d9eee0;
+      border-radius: 19px;
+      background: linear-gradient(125deg, #eaf8ef, #f7fcf8);
+      box-shadow: var(--shadow)
+    }
+
+    .barcode-hero-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 16px;
+      background: #16834a;
+      color: #fff;
+      font-size: 25px;
+      box-shadow: 0 7px 15px #16834a30
+    }
+
+    .barcode-hero-copy {
+      flex: 1;
+      min-width: 0
+    }
+
+    .barcode-hero-copy strong {
+      display: block;
+      font-size: 14px
+    }
+
+    .barcode-hero-copy small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+      margin-top: 4px
+    }
+
+    .barcode-hero .primary {
+      padding: 11px 13px;
+      white-space: nowrap
+    }
+
+    .scanner-video-wrap {
+      position: relative;
+      overflow: hidden;
+      background: #101812;
+      border-radius: 18px;
+      aspect-ratio: 4/3;
+      margin-bottom: 12px
+    }
+
+    .scanner-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .scanner-frame {
+      position: absolute;
+      inset: 18% 12%;
+      border: 2px solid #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 0 999px #07130c40;
+      pointer-events: none
+    }
+
+    .scanner-hint {
+      margin: 0 0 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5
+    }
+
+    .scanner-manual {
+      display: flex;
+      gap: 8px
+    }
+
+    .scanner-manual input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #dfe8e1;
+      border-radius: 12px;
+      padding: 11px;
+      background: #fff
+    }
+
+    .scanner-app {
+      --scan-bg: #080e17;
+      --scan-surface: #0e1724;
+      --scan-card: #101b2a;
+      --scan-line: #203044;
+      --scan-text: #f4f8fc;
+      --scan-muted: #92a2b6;
+      --scan-teal: #00e5d4;
+      position: fixed;
+      z-index: 40;
+      inset: 0;
+      overflow: auto;
+      background: radial-gradient(ellipse at 50% -12%, #10202b 0%, var(--scan-bg) 60%);
+      color: var(--scan-text);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom)
+    }
+
+    .scanner-app[hidden] {
+      display: none !important
+    }
+
+    #scannerModule .scan-bottom-nav {
+      display: none !important
+    }
+
+    .scanner-shell {
+      width: min(100%, 440px);
+      min-height: 100%;
+      margin: 0 auto;
+      position: relative;
+      padding-bottom: 86px;
+      background: linear-gradient(180deg, #09111c, #070d16)
+    }
+
+    .scanner-screen {
+      display: none;
+      min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      padding: 22px 18px 18px;
+      animation: scanFade .18s ease-out
+    }
+
+    .scanner-screen.active {
+      display: flex;
+      flex-direction: column
+    }
+
+    @keyframes scanFade {
+      from {
+        opacity: .55;
+        transform: translateY(4px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .scan-statusbar {
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .02em;
+      color: #dbe5f0
+    }
+
+    .scan-status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px
+    }
+
+    .scan-icon-btn {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: var(--scan-text)
+    }
+
+    .scan-icon-btn svg {
+      width: 19px;
+      height: 19px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8
+    }
+
+    .scan-page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 38px;
+      margin: 0 0 16px
+    }
+
+    .scan-page-head h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .01em
+    }
+
+    .scan-page-head .scan-icon-btn:last-child {
+      margin-left: auto
+    }
+
+    .scan-camera-screen {
+      padding: 0 0 90px;
+      background: #070d16
+    }
+
+    .scan-camera-head {
+      position: absolute;
+      z-index: 3;
+      top: calc(22px + env(safe-area-inset-top));
+      left: 18px;
+      right: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .scan-camera-head-title {
+      font-size: 11px;
+      font-weight: 700
+    }
+
+    .scan-camera-preview {
+      position: absolute;
+      inset: calc(62px + env(safe-area-inset-top)) 0 180px;
+      background: #060a10;
+      overflow: hidden
+    }
+
+    .scan-camera-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .scan-camera-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #8090a4;
+      background: radial-gradient(ellipse, #152231, #080e17 75%);
+      font-size: 12px;
+      text-align: center;
+      padding: 28px;
+      line-height: 1.6
+    }
+
+    .scan-camera-placeholder[hidden] {
+      display: none
+    }
+
+    .scan-target {
+      position: absolute;
+      width: min(68vw, 250px);
+      height: min(25vw, 104px);
+      max-height: 104px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none
+    }
+
+    .scan-target:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: var(--scan-teal);
+      box-shadow: 0 0 9px var(--scan-teal);
+      animation: scanLine 2s ease-in-out infinite
+    }
+
+    .scan-corner {
+      position: absolute;
+      width: 23px;
+      height: 23px;
+      border-color: var(--scan-teal);
+      border-style: solid;
+      filter: drop-shadow(0 0 4px #00e5d480)
+    }
+
+    .scan-corner.tl {
+      top: 0;
+      left: 0;
+      border-width: 3px 0 0 3px;
+      border-radius: 6px 0 0
+    }
+
+    .scan-corner.tr {
+      top: 0;
+      right: 0;
+      border-width: 3px 3px 0 0;
+      border-radius: 0 6px 0 0
+    }
+
+    .scan-corner.bl {
+      bottom: 0;
+      left: 0;
+      border-width: 0 0 3px 3px;
+      border-radius: 0 0 0 6px
+    }
+
+    .scan-corner.br {
+      bottom: 0;
+      right: 0;
+      border-width: 0 3px 3px 0;
+      border-radius: 0 0 6px
+    }
+
+    @keyframes scanLine {
+
+      0%,
+      100% {
+        transform: translateY(-24px);
+        opacity: .6
+      }
+
+      50% {
+        transform: translateY(24px);
+        opacity: 1
+      }
+    }
+
+    .scan-camera-message {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      text-align: center;
+      color: #d4deea;
+      font-size: 10px;
+      line-height: 1.5
+    }
+
+    .scan-camera-message.error {
+      color: #ffb4b4
+    }
+
+    .scan-camera-panel {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 48vh;
+      overflow-y: auto;
+      padding: 12px 16px max(14px, env(safe-area-inset-bottom));
+      border-radius: 18px 18px 0 0;
+      background: #0e1724;
+      border-top: 1px solid #253248
+    }
+
+    .scan-mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px
+    }
+
+    .scan-mode-tab {
+      min-height: 40px;
+      border: 1px solid #202d40;
+      border-radius: 10px;
+      background: #111b2a;
+      color: #9baabe;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px
+    }
+
+    .scan-mode-tab.active {
+      background: var(--scan-teal);
+      color: #06171c;
+      border-color: var(--scan-teal)
+    }
+
+    .scan-mode-tab svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8
+    }
+
+    .scan-camera-help {
+      text-align: center;
+      margin: 13px 0 0;
+      color: #a3b1c2;
+      font-size: 9px
+    }
+
+    .scan-manual-row {
+      display: flex;
+      gap: 7px;
+      margin-top: 10px
+    }
+
+    .scan-manual-row input {
+      flex: 1;
+      min-width: 0;
+      height: 36px;
+      padding: 0 10px;
+      color: #f3f7fb;
+      background: #0a121e;
+      border: 1px solid #2a394e;
+      border-radius: 9px;
+      font-size: 11px;
+      outline: none
+    }
+
+    .scan-manual-row button {
+      height: 36px;
+      padding: 0 12px;
+      background: transparent;
+      border: 1px solid #315062;
+      border-radius: 9px;
+      color: var(--scan-teal);
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .scan-result-card {
+      border: 1px solid #202e41;
+      border-radius: 12px;
+      background: #101a28;
+      padding: 11px;
+      margin-bottom: 9px
+    }
+
+    .scan-result-product {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1d2a3b
+    }
+
+    .scan-product-thumb {
+      width: 50px;
+      height: 50px;
+      flex: 0 0 50px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #263548, #101a27);
+      font-size: 24px;
+      color: #f7fbff;
+      overflow: hidden
+    }
+
+    .scan-product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .scan-product-copy {
+      min-width: 0
+    }
+
+    .scan-product-copy strong {
+      display: block;
+      font-size: 11px;
+      line-height: 1.45
+    }
+
+    .scan-product-copy small {
+      display: block;
+      color: var(--scan-teal);
+      font-size: 8px;
+      margin-top: 3px
+    }
+
+    .scan-data-row {
+      padding: 8px 0 0;
+      color: #aab8c8;
+      font-size: 9px
+    }
+
+    .scan-data-row strong {
+      display: block;
+      color: #f1f6fb;
+      font-size: 10px;
+      font-weight: 500;
+      margin-top: 3px;
+      overflow-wrap: anywhere
+    }
+
+    .scan-result-main {
+      width: 100%;
+      min-height: 37px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--scan-teal);
+      color: #05191c;
+      font-size: 10px;
+      font-weight: 750;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin: 9px 0 7px
+    }
+
+    .scan-result-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px
+    }
+
+    .scan-result-actions button,
+    .scan-option {
+      min-height: 33px;
+      border: 1px solid #28465a;
+      border-radius: 9px;
+      background: #0b1420;
+      color: #e7eff6;
+      font-size: 9px;
+      font-weight: 650;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px
+    }
+
+    .scan-result-actions svg,
+    .scan-option svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8
+    }
+
+    .scan-more-label {
+      margin: 12px 0 6px;
+      font-size: 9px;
+      color: #d8e1eb
+    }
+
+    .scan-options {
+      background: #101a28;
+      border: 1px solid #1f2d40;
+      border-radius: 10px;
+      overflow: hidden
+    }
+
+    .scan-option {
+      width: 100%;
+      border: 0;
+      border-radius: 0;
+      min-height: 34px;
+      justify-content: flex-start;
+      padding: 0 10px;
+      background: transparent
+    }
+
+    .scan-option+.scan-option {
+      border-top: 1px solid #1e2c3f
+    }
+
+    .scan-option span:last-child {
+      margin-left: auto;
+      color: #8597aa
+    }
+
+    .scan-result-screen {
+      padding-bottom: 88px
+    }
+
+    .scan-result-scroll {
+      overflow: auto;
+      flex: 1
+    }
+
+    .scan-not-found {
+      padding: 18px 12px;
+      text-align: center;
+      border: 1px solid #263448;
+      border-radius: 12px;
+      background: #101a28;
+      margin-bottom: 10px
+    }
+
+    .scan-not-found-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin: 0 auto 9px;
+      display: grid;
+      place-items: center;
+      color: #ffca78;
+      background: #3a2b18;
+      font-size: 19px
+    }
+
+    .scan-not-found h3 {
+      font-size: 13px;
+      margin: 0 0 5px
+    }
+
+    .scan-not-found p {
+      font-size: 9px;
+      color: var(--scan-muted);
+      line-height: 1.5;
+      margin: 0
+    }
+
+    .scan-register-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px
+    }
+
+    .scan-register-form .scan-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .scan-register-form .scan-field.full {
+      grid-column: 1/-1
+    }
+
+    .scan-register-form label {
+      font-size: 8px;
+      color: #aab8c8
+    }
+
+    .scan-register-form input,
+    .scan-register-form select {
+      width: 100%;
+      min-width: 0;
+      height: 34px;
+      border: 1px solid #29384c;
+      border-radius: 8px;
+      background: #0b1420;
+      color: #f4f8fc;
+      padding: 0 9px;
+      font-size: 10px;
+      outline: none
+    }
+
+    .scan-qr-art {
+      width: 67px;
+      height: 67px;
+      background: #fff;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #07101a;
+      font-size: 52px;
+      flex: 0 0 67px
+    }
+
+    .scan-wifi-card {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start
+    }
+
+    .scan-wifi-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .scan-wifi-info strong {
+      display: block;
+      font-size: 10px;
+      margin-bottom: 8px
+    }
+
+    .scan-wifi-info small {
+      display: block;
+      color: #91a3b5;
+      font-size: 8px;
+      margin-top: 5px;
+      overflow-wrap: anywhere
+    }
+
+    .scan-password {
+      display: flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    .scan-password button {
+      border: 0;
+      background: none;
+      color: var(--scan-teal);
+      font-size: 8px;
+      padding: 0
+    }
+
+    @media(min-width:600px) {
+      .scanner-app {
+        display: flex;
+        align-items: center;
+        justify-content: center
+      }
+
+      .scanner-shell {
+        min-height: min(850px, 100dvh);
+        height: min(850px, 100dvh);
+        border: 1px solid #26384c;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 25px 80px #0009
+      }
+
+      .scanner-app {
+        background: radial-gradient(ellipse, #142334, #070d16 70%)
+      }
+    }
+
+    .scanner-app {
+      --scan-bg: #f5f8f5;
+      --scan-surface: #e7f6ed;
+      --scan-card: #fff;
+      --scan-line: #e8eee9;
+      --scan-text: #17231c;
+      --scan-muted: #738078;
+      --scan-teal: #16834a;
+      background: #f5f8f5;
+      color: var(--ink);
+      font-family: Inter, "Noto Sans Bengali", "Hind Siliguri", system-ui, -apple-system, sans-serif
+    }
+
+    .scanner-shell {
+      width: 100%;
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 0;
+      background: #fbfdfb;
+      box-shadow: none
+    }
+
+    .scanner-screen {
+      color: var(--ink)
+    }
+
+    .scanner-screen:not(.scan-camera-screen) {
+      padding-bottom: calc(92px + env(safe-area-inset-bottom))
+    }
+
+    .scan-statusbar {
+      color: #5f7868
+    }
+
+    .scan-status-icons {
+      color: #476250
+    }
+
+    .scan-icon-btn {
+      color: var(--green);
+      background: #fff
+    }
+
+    .scan-page-head h2 {
+      color: var(--ink)
+    }
+
+    .scan-camera-screen {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
+      padding: 0;
+      background: #f5f8f5;
+      color: var(--ink)
+    }
+
+    .scan-camera-head {
+      top: env(safe-area-inset-top);
+      left: 0;
+      right: 0;
+      height: 58px;
+      padding: 0 14px;
+      background: #e7f6ed;
+      border-bottom: 1px solid #d8eadc;
+      color: var(--green)
+    }
+
+    .scan-camera-head-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink)
+    }
+
+    .scan-camera-preview {
+      inset: calc(58px + env(safe-area-inset-top)) 0 calc(98px + env(safe-area-inset-bottom));
+      background: #17231c
+    }
+
+    .scan-camera-placeholder {
+      background: radial-gradient(ellipse, #eaf7ef, #f7fbf8 78%);
+      color: #62766a
+    }
+
+    .scan-target:before {
+      background: var(--green);
+      box-shadow: 0 0 9px #16834a80
+    }
+
+    .scan-corner {
+      border-color: var(--green);
+      filter: drop-shadow(0 0 4px #16834a80)
+    }
+
+    .scan-camera-message {
+      color: #e7f7eb;
+      text-shadow: 0 1px 4px #0009
+    }
+
+    .scan-camera-message.error {
+      color: #fff;
+      background: #a63232cc;
+      padding: 8px;
+      border-radius: 10px;
+      text-shadow: none
+    }
+
+    .scan-camera-panel {
+      padding: 13px 16px max(14px, env(safe-area-inset-bottom));
+      background: #fbfdfb;
+      border-color: var(--line);
+      box-shadow: 0 -8px 22px #1b3a2410
+    }
+
+    .scan-mode-tabs {
+      display: none
+    }
+
+    .scan-camera-help {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650
+    }
+
+    .scan-manual-row {
+      margin-top: 0
+    }
+
+    .scan-manual-row input {
+      height: 44px;
+      background: #fff;
+      border-color: #dfe8e1;
+      color: var(--ink);
+      font-size: 13px
+    }
+
+    .scan-manual-row input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #16834a15
+    }
+
+    .scan-manual-row button {
+      height: 44px;
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+      padding: 0 16px;
+      font-size: 12px
+    }
+
+    .scan-camera-retry {
+      display: block;
+      width: 100%;
+      margin-top: 9px;
+      padding: 9px 12px;
+      border: 1px solid #dce9df;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .scan-session-feed {
+      display: grid;
+      gap: 7px;
+      max-height: 150px;
+      overflow-y: auto;
+      margin: 9px 0;
+      overscroll-behavior: contain
+    }
+
+    .scan-session-entry {
+      padding: 9px 10px;
+      color: var(--ink);
+      background: #f1faf4;
+      border: 1px solid #dceee2;
+      border-radius: 10px;
+      font-size: 11px
+    }
+
+    .scan-session-entry strong,
+    .scan-session-entry small {
+      display: block
+    }
+
+    .scan-session-entry small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      overflow-wrap: anywhere
+    }
+
+    .scan-session-entry button {
+      margin-top: 7px;
+      padding: 6px 9px;
+      color: #fff;
+      background: var(--green);
+      border: 0;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .scan-session-empty {
+      margin: 8px 0;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center
+    }
+
+    .scan-result-card,
+    .scan-not-found {
+      background: #fff;
+      border-color: var(--line);
+      box-shadow: var(--shadow)
+    }
+
+    .scan-result-product {
+      border-color: var(--line)
+    }
+
+    .scan-product-thumb {
+      background: var(--mint);
+      color: var(--green)
+    }
+
+    .scan-product-copy strong,
+    .scan-data-row strong {
+      color: var(--ink)
+    }
+
+    .scan-product-copy small,
+    .scan-result-main {
+      color: var(--green)
+    }
+
+    .scan-data-row {
+      color: var(--muted)
+    }
+
+    .scan-result-main {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+      box-shadow: 0 5px 12px #16834a20
+    }
+
+    .scan-result-actions button,
+    .scan-option {
+      background: #fff;
+      border-color: #dce9df;
+      color: var(--green)
+    }
+
+    .scan-option+.scan-option {
+      border-color: var(--line)
+    }
+
+    @media(min-width:600px) {
+      .scanner-app {
+        display: block;
+        align-items: initial;
+        justify-content: initial;
+        background: #f5f8f5
+      }
+
+      .scanner-shell {
+        width: 100%;
+        max-width: none;
+        min-height: 100dvh;
+        height: 100dvh;
+        border: 0;
+        border-radius: 0;
+        overflow: hidden;
+        box-shadow: none
+      }
+    }
+
+    .purchase-hero {
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #126e40, #20a55e);
+      color: #fff;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 24px #16834a24
+    }
+
+    .purchase-hero-top {
+      display: flex;
+      align-items: center;
+      gap: 13px
+    }
+
+    .purchase-hero-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: #ffffff20;
+      font-size: 24px
+    }
+
+    .purchase-hero h3 {
+      margin: 0;
+      font-size: 16px
+    }
+
+    .purchase-hero p {
+      margin: 4px 0 0;
+      color: #d9f4e2;
+      font-size: 12px;
+      line-height: 1.45
+    }
+
+    .purchase-form-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 15px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow)
+    }
+
+    .purchase-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      margin: 0 0 12px;
+      color: #34473b
+    }
+
+    .purchase-item {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      margin-bottom: 10px;
+      background: #fbfdfb
+    }
+
+    .purchase-item-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px
+    }
+
+    .purchase-item-head strong {
+      font-size: 12px
+    }
+
+    .purchase-remove {
+      border: 0;
+      background: #fff0f0;
+      color: #b33b3b;
+      border-radius: 9px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 700
+    }
+
+    .purchase-item-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px
+    }
+
+    .purchase-item-fields .field {
+      margin: 0
+    }
+
+    .purchase-item-fields label {
+      font-size: 10px
+    }
+
+    .purchase-item-fields input,
+    .purchase-item-fields select {
+      padding: 10px;
+      font-size: 12px
+    }
+
+    .purchase-product-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px
+    }
+
+    .purchase-product-fields .field {
+      margin: 0
+    }
+
+    .purchase-product-fields label {
+      font-size: 10px
+    }
+
+    .purchase-product-fields input,
+    .purchase-product-fields select {
+      padding: 10px;
+      font-size: 12px
+    }
+
+    .purchase-product-fields .full {
+      grid-column: 1/-1
+    }
+
+    .purchase-total-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+      font-weight: 700
+    }
+
+    .purchase-total-box strong {
+      font-size: 20px;
+      color: var(--green)
+    }
+
+    .purchase-history-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0
+    }
+
+    .purchase-history-meta strong {
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .purchase-history-meta small {
+      font-size: 10px;
+      color: var(--muted)
+    }
+
+    .ledger-customer-row {
+      cursor: pointer
+    }
+
+    .ledger-customer-row:hover {
+      background: #f8fcf9
+    }
+
+    .ledger-details {
+      padding: 12px 14px;
+      background: #f8fcf9;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .ledger-transaction {
+      padding: 11px;
+      margin-bottom: 9px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px
+    }
+
+    .ledger-transaction:last-child {
+      margin-bottom: 0
+    }
+
+    .ledger-transaction-head,
+    .ledger-details-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center
+    }
+
+    .ledger-transaction-head strong,
+    .ledger-details-total strong {
+      font-size: 12px
+    }
+
+    .ledger-transaction-head small,
+    .ledger-product-line small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 3px
+    }
+
+    .ledger-product-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eef2ef;
+      font-size: 11px
+    }
+
+    .ledger-details-total {
+      padding-top: 10px;
+      margin-top: 7px;
+      border-top: 1px solid var(--line);
+      color: var(--green)
+    }
+
+    .payment-choice {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px
+    }
+
+    .payment-choice label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 10px 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #52645a
+    }
+
+    .payment-choice input {
+      accent-color: var(--green)
+    }
+
+    .barcode-entry {
+      display: flex;
+      gap: 8px
+    }
+
+    .barcode-entry input {
+      flex: 1;
+      min-width: 0
+    }
+
+    .barcode-entry button {
+      white-space: nowrap
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 750;
+      color: #52645a
+    }
+
+    .field input,
+    .field select {
+      border: 1px solid #dfe8e1;
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+      outline: none;
+      width: 100%;
+      color: var(--ink)
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #16834a15
+    }
+
+    .form-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 15px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .purchase-form-card .form-grid,
+    .purchase-form-card .purchase-item-fields,
+    .purchase-form-card .purchase-product-fields {
+      grid-template-columns: 1fr
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    .notice {
+      background: #fff8e9;
+      border: 1px solid #f7e7c2;
+      color: #855d16;
+      border-radius: 12px;
+      padding: 11px;
+      font-size: 12px;
+      margin: 12px 0
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-top: 1px solid var(--line);
+      font-weight: 800
+    }
+
+    .cart-total strong {
+      font-size: 24px;
+      color: var(--green)
+    }
+
+    .empty {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(520px, 100%);
+      height: 76px;
+      background: #fff;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 7px 7px max(7px, env(safe-area-inset-bottom));
+      box-shadow: 0 -8px 22px #1b3a2410
+    }
+
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: #8b978f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 13px
+    }
+
+    .nav-btn .nav-ico {
+      font-size: 21px;
+      line-height: 1
+    }
+
+    .nav-btn.active {
+      color: var(--green);
+      background: #eff9f2
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 30;
+      bottom: 92px;
+      left: 50%;
+      transform: translate(-50%, 15px);
+      opacity: 0;
+      pointer-events: none;
+      background: #173d28;
+      color: #fff;
+      padding: 12px 17px;
+      border-radius: 12px;
+      font-size: 13px;
+      box-shadow: var(--shadow);
+      transition: .25s;
+      max-width: 90%;
+      text-align: center
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0)
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      background: #12251b70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px
+    }
+
+    .modal-backdrop.show {
+      display: flex
+    }
+
+    .modal {
+      width: min(520px, 100%);
+      background: #fbfdfb;
+      border-radius: 26px;
+      padding: 20px 18px 28px;
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+      box-shadow: 0 18px 48px rgba(14, 32, 20, .18)
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 17px
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 19px
+    }
+
+    .close {
+      border: 0;
+      background: #eaf4ed;
+      color: var(--green);
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      font-size: 19px
+    }
+
+    .field textarea {
+      border: 1px solid #dfe8e1;
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+      outline: none;
+      width: 100%;
+      color: var(--ink);
+      min-height: 110px;
+      resize: vertical
+    }
+
+    .field textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #16834a15
+    }
+
+    .settings-hero {
+      padding: 20px;
+      margin-bottom: 15px;
+      color: #fff;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #126e40, #20a55e);
+      box-shadow: 0 10px 24px #16834a24
+    }
+
+    .settings-hero-top {
+      display: flex;
+      align-items: center;
+      gap: 13px
+    }
+
+    .settings-hero-icon {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: #ffffff20;
+      font-size: 24px
+    }
+
+    .settings-hero h3 {
+      margin: 0;
+      font-size: 17px
+    }
+
+    .settings-hero p {
+      margin: 5px 0 0;
+      color: #d9f4e2;
+      font-size: 12px;
+      line-height: 1.45
+    }
+
+    .settings-card {
+      margin-bottom: 14px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow)
+    }
+
+    .settings-card-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 14px;
+      color: #34473b;
+      font-size: 14px;
+      font-weight: 800
+    }
+
+    .settings-info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px
+    }
+
+    .settings-info-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0
+    }
+
+    .settings-info-row span:first-child {
+      color: var(--muted)
+    }
+
+    .settings-info-row strong {
+      text-align: right;
+      overflow-wrap: anywhere
+    }
+
+    .profile-hero {
+      padding: 22px 18px;
+      margin-bottom: 15px;
+      color: #fff;
+      text-align: center;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #126e40, #20a55e);
+      box-shadow: 0 10px 24px #16834a24
+    }
+
+    .profile-avatar {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 11px;
+      display: grid;
+      place-items: center;
+      color: var(--green-dark);
+      background: #fff;
+      border: 4px solid #ffffff55;
+      border-radius: 50%;
+      font-size: 29px;
+      font-weight: 850;
+      box-shadow: 0 7px 18px #06432135
+    }
+
+    .profile-hero h3 {
+      margin: 0;
+      font-size: 19px
+    }
+
+    .profile-hero p {
+      margin: 5px 0 0;
+      color: #d9f4e2;
+      font-size: 12px
+    }
+
+    .profile-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px
+    }
+
+    .profile-summary-item {
+      padding: 13px;
+      background: #f1faf4;
+      border: 1px solid #e0f0e5;
+      border-radius: 14px
+    }
+
+    .profile-summary-item small,
+    .profile-summary-item strong {
+      display: block
+    }
+
+    .profile-summary-item small {
+      color: var(--muted);
+      font-size: 10px
+    }
+
+    .profile-summary-item strong {
+      margin-top: 5px;
+      font-size: 13px;
+      overflow-wrap: anywhere
+    }
+
+    .shop-logo {
+      border: 0;
+      padding: 0;
+      cursor: pointer
+    }
+
+    @media(min-width:700px) {
+      body {
+        padding: 24px 0
+      }
+
+      .app {
+        border-radius: 28px;
+        overflow: hidden;
+        min-height: calc(100vh - 48px)
+      }
+
+      .bottom-nav {
+        bottom: 24px;
+        border-radius: 0 0 28px 28px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topline">
+        <div class="shop">
+          <button class="shop-logo" type="button" aria-label="Open user profile" title="User profile" onclick="openUserProfile()">মু</button>
+          <div>
+            <div class="eyebrow" data-i18n="welcome">স্বাগতম 👋</div>
+            <h1 id="shopName">Mudi Store</h1>
+          </div>
+        </div>
+        <button class="settings-btn" aria-label="Store Settings" onclick="openShopSettings()"><span
+            class="gear">⚙</span></button>
+      </div>
+      <div class="date-row"><span id="todayDate">আজকের হিসাব</span><span class="status"><i class="dot"></i> <span
+            data-i18n="storeOpenText">দোকান চালু</span></span></div>
+      <div class="balance">
+        <div class="balance-meta">
+          <div class="balance-date-wrap">
+            <span class="balance-date" id="balanceDate">শুক্রবার, ১৬ অক্টোবর</span>
+            <span class="balance-time" id="balanceTime">১১:৪৫ AM</span>
+          </div>
+          <span class="weather-badge" id="weatherBadge">☀️ ৩০°</span>
+        </div>
+        <div class="balance-label" data-i18n="balanceTotalSales">আজকের মোট বিক্রি</div>
+        <div class="balance-amount" id="heroSales">৳ ৪,৮৫০</div>
+        <div class="balance-bottom"><span class="balance-note" data-i18n="balanceSummaryText">আজকের বিক্রির
+            সারাংশ</span><button class="ghost-btn" data-i18n="quickSaleAction" onclick="showPage('sales')">বিক্রি
+            করুন　↗</button></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page active" id="homePage">
+        <div class="section-head">
+          <h2 data-i18n="todaySummary">আজকের হিসাব</h2><button class="text-btn" data-i18n="viewDetails"
+            onclick="showPage('reports')">বিস্তারিত দেখুন →</button>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">৳</span><span class="trend" data-i18n="todayTag">আজ</span>
+            </div><small data-i18n="totalSalesLabel">মোট বিক্রি</small><strong id="salesMetric">৳ ৪,৮৫০</strong>
+          </div>
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">↗</span><span class="trend"
+                data-i18n="approxTag">আনুমানিক</span></div><small data-i18n="profitLabel">মোট লাভ</small><strong
+              id="profitMetric">৳ ৬৮০</strong>
+          </div>
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">📒</span><span class="badge"
+                data-i18n="dueBadge">বাকি</span></div><small data-i18n="customerDueLabel">ক্রেতার কাছে
+              পাওনা</small><strong id="dueMetric">৳ ২,৩৫০</strong>
+          </div>
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">📦</span><span class="trend" id="stockTrend"
+                data-i18n="inStockTag">স্টকে আছে</span></div><small data-i18n="productTypeLabel">পণ্যের
+              ধরন</small><strong id="productMetric">২৪টি</strong>
+          </div>
+        </div>
+        <button class="daily-ledger-card" type="button" onclick="showPage('ledger')">
+          <span class="metric-icon">📒</span>
+          <span class="daily-ledger-copy"><strong data-i18n="todayLedgerTitle">আজকের বাকির হিসাব</strong><small id="todayLedgerSummary">আজকের বাকি ও জমার বিবরণ দেখুন</small></span>
+          <span class="daily-ledger-arrow">›</span>
+        </button>
+        <div class="section-head" style="margin-top:25px">
+          <h2 data-i18n="quickActions">দ্রুত কাজ</h2>
+        </div>
+        <div class="shortcuts">
+          <button class="shortcut" onclick="showPage('sales')"><span class="ico">🛒</span><span data-i18n="newSale">নতুন
+              বিক্রি</span></button>
+          <button class="shortcut" onclick="openProductModal()"><span class="ico">📦</span><span
+              data-i18n="addProduct">পণ্য যোগ</span></button>
+          <button class="shortcut" onclick="showPage('ledger')"><span class="ico">📒</span><span
+              data-i18n="ledgerBook">বাকির খাতা</span></button>
+          <button class="shortcut" onclick="openPurchaseModal()"><span class="ico">🚚</span><span
+              data-i18n="purchaseStock">মাল কেনা</span></button>
+          <button class="shortcut" onclick="showPage('stock')"><span class="ico">🏪</span><span
+              data-i18n="stockView">স্টক দেখুন</span></button>
+          <button class="shortcut" onclick="showPage('reports')"><span class="ico">📊</span><span
+              data-i18n="reportLabel">রিপোর্ট</span></button>
+            <button class="shortcut" onclick="showPage('debit-credit')"><span class="ico">📅</span><span
+              data-i18n="debitCreditPageTitle">ডেবিট-ক্রেডিট</span></button>
+        </div>
+        <div class="section-head" style="margin-top:26px">
+          <h2 data-i18n="recentSalesTitle">সাম্প্রতিক বিক্রি</h2><button class="text-btn" data-i18n="seeAll"
+            onclick="showPage('sales')">সব দেখুন →</button>
+        </div>
+        <div class="panel" id="recentSales">
+          <div class="sale-row">
+            <div class="item-icon">🧺</div>
+            <div class="item-info"><strong>রহিম — চাল, ডাল, তেল</strong><small>আজ, দুপুর ২:১৫ · নগদ</small></div>
+            <div class="item-price">৳ ৫৮০<small>সম্পন্ন</small></div>
+          </div>
+          <div class="sale-row">
+            <div class="item-icon">🛍️</div>
+            <div class="item-info"><strong>সুমন — বিস্কুট ও সাবান</strong><small>আজ, দুপুর ১:৪০ · বাকি</small></div>
+            <div class="item-price">৳ ২২০<small>বাকি</small></div>
+          </div>
+          <div class="sale-row">
+            <div class="item-icon">🥛</div>
+            <div class="item-info"><strong>মিনা — দুধ ও চিনি</strong><small>আজ, সকাল ১১:২০ · নগদ</small></div>
+            <div class="item-price">৳ ১৫০<small>সম্পন্ন</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="salesPage">
+        <div class="page-title">
+          <h2 data-i18n="newSalePage">নতুন বিক্রি</h2><button class="secondary" data-i18n="clearCart"
+            onclick="clearCart()">কার্ট খালি</button>
+        </div>
+        <div class="barcode-hero" role="button" tabindex="0" onclick="openBarcodeScanner('sale')"
+          onkeydown="if(event.key==='Enter'||event.key===' ')openBarcodeScanner('sale')">
+          <div class="barcode-hero-icon">▦</div>
+          <div class="barcode-hero-copy"><strong data-i18n="barcodeTitle">বারকোড স্ক্যানার</strong><small
+              data-i18n="barcodeSubtitle">ক্যামেরা দিয়ে স্ক্যান করে পণ্য দ্রুত কার্টে যোগ করুন</small></div><span
+            class="barcode-hero-icon" style="width:40px;height:40px;font-size:18px"
+            data-i18n="scanBarcode">স্ক্যান</span>
+        </div>
+        <div class="searchbar"><span>⌕</span><input id="saleSearch" data-i18n-placeholder="searchProduct"
+            placeholder="পণ্যের নাম লিখুন..." oninput="renderSaleProducts()"><span>▦</span></div>
+        <div class="panel" id="saleProducts"></div>
+        <div class="section-head" style="margin-top:22px">
+          <h2 data-i18n="salesListTitle">বিক্রির তালিকা</h2><span id="cartCount" class="badge">০টি পণ্য</span>
+        </div>
+        <div class="panel" id="cartItems">
+          <div class="empty" data-i18n="cartEmpty">বিক্রির জন্য পণ্য বেছে নিন</div>
+        </div>
+        <div class="form-card" style="margin-top:14px">
+          <div class="field"><label for="customerName" data-i18n="customerNameLabel">ক্রেতার নাম (ঐচ্ছিক)</label><input
+              id="customerName" data-i18n-placeholder="customerNamePlaceholder" placeholder="যেমন: রহিম মিয়া"></div>
+          <div class="field"><label for="paymentType" data-i18n="paymentTypeLabel">পেমেন্টের ধরন</label><select
+              id="paymentType">
+              <option value="cash" data-i18n="paymentCash">নগদ</option>
+              <option value="due" data-i18n="paymentDue">বাকি</option>
+              <option value="partial" data-i18n="paymentPartial">আংশিক পেমেন্ট</option>
+            </select></div>
+          <div class="field" id="paidField" style="display:none"><label for="paidAmount" data-i18n="paidNowLabel">এখন
+              জমা (৳)</label><input id="paidAmount" type="number" min="0" data-i18n-placeholder="paidNowPlaceholder"
+              placeholder="কত টাকা দিলেন?"></div>
+          <div class="cart-total"><span data-i18n="totalLabel">সর্বমোট</span><strong id="cartTotal">৳ ০</strong></div>
+          <button class="primary" style="width:100%" data-i18n="completeSaleBtn" onclick="completeSale()">✓　বিক্রি
+            সম্পন্ন করুন</button>
+        </div>
+      </section>
+
+      <section class="page" id="stockPage">
+        <div class="page-title">
+          <h2 data-i18n="stockPageTitle">পণ্যের স্টক</h2><button class="primary" data-i18n="addProductBtn"
+            onclick="openProductModal()">＋ পণ্য</button>
+        </div>
+        <div class="searchbar"><span>⌕</span><input id="stockSearch" data-i18n-placeholder="searchProductStock"
+            placeholder="পণ্য খুঁজুন..." oninput="renderStock()"></div>
+        <div class="panel" id="stockList"></div>
+        <div class="notice" data-i18n="stockTips">💡 টিপস: পণ্য বিক্রি হলে স্টক স্বয়ংক্রিয়ভাবে কমবে। নতুন মাল কিনলে “মাল
+          কেনা” থেকে স্টক বাড়ান।</div>
+      </section>
+
+      <section class="page" id="purchasePage">
+        <div class="page-title">
+          <h2 data-i18n="purchasePageTitle">নতুন ক্রয়</h2><button class="secondary" onclick="showPage('stock')"
+            data-i18n="viewStockBtn">স্টক দেখুন</button>
+        </div>
+        <div class="purchase-hero">
+          <div class="purchase-hero-top">
+            <div class="purchase-hero-icon">🚚</div>
+            <div>
+              <h3 data-i18n="purchaseHeroTitle">মাল কেনা ও স্টক আপডেট</h3>
+              <p data-i18n="purchaseHeroSubtitle">সরবরাহকারী, পণ্য, পরিমাণ ও পেমেন্টের তথ্য একসাথে সংরক্ষণ করুন।</p>
+            </div>
+          </div>
+        </div>
+        <form id="purchaseForm" onsubmit="addPurchase(event)">
+          <div class="purchase-form-card">
+            <h3 class="purchase-section-title" data-i18n="supplierDetails">সরবরাহকারীর তথ্য</h3>
+            <div class="form-grid">
+              <div class="field"><label data-i18n="supplierName">সরবরাহকারীর নাম</label><input name="supplier"
+                  placeholder="যেমন: রহমান ট্রেডার্স"></div>
+              <div class="field"><label data-i18n="supplierPhone">মোবাইল নম্বর</label><input name="phone"
+                  inputmode="tel" placeholder="01XXXXXXXXX"></div>
+              <div class="field"><label data-i18n="invoiceNumber">চালান নম্বর</label><input name="invoice"
+                  placeholder="ঐচ্ছিক"></div>
+              <div class="field"><label data-i18n="purchaseDate">ক্রয়ের তারিখ</label><input name="date" type="date"
+                  required></div>
+            </div>
+          </div>
+          <div class="purchase-form-card">
+            <h3 class="purchase-section-title" data-i18n="purchaseItems">ক্রয় করা পণ্য</h3>
+            <div id="purchaseItems"></div>
+            <button type="button" class="secondary" style="width:100%" onclick="addPurchaseItem()"
+              data-i18n="addPurchaseItem">＋ আরেকটি পণ্য যোগ করুন</button>
+            <div class="purchase-total-box"><span data-i18n="purchaseTotal">মোট ক্রয় মূল্য</span><strong
+                id="purchaseTotal">৳ ০</strong></div>
+          </div>
+          <div class="purchase-form-card">
+            <h3 class="purchase-section-title" data-i18n="paymentDetails">পেমেন্টের তথ্য</h3>
+            <div class="field"><label data-i18n="purchasePaymentStatus">পেমেন্টের অবস্থা</label>
+              <div class="payment-choice"><label><input type="radio" name="paymentStatus" value="paid" checked
+                    onchange="updatePurchasePaymentUI()"><span
+                    data-i18n="paidStatus">পরিশোধিত</span></label><label><input type="radio" name="paymentStatus"
+                    value="partial" onchange="updatePurchasePaymentUI()"><span
+                    data-i18n="partialStatus">আংশিক</span></label><label><input type="radio" name="paymentStatus"
+                    value="due" onchange="updatePurchasePaymentUI()"><span data-i18n="dueStatus">বাকি</span></label>
+              </div>
+            </div>
+            <div class="field" id="purchasePaidField" style="display:none"><label data-i18n="amountPaid">এখন
+                পরিশোধ</label><input name="paid" type="number" min="0" step="any" placeholder="৳"></div>
+            <div class="field"><label data-i18n="purchaseNotes">নোট</label><textarea name="notes" rows="3"
+                placeholder="যেমন: ডেলিভারি বা পেমেন্টের নোট"></textarea></div>
+            <button class="primary" type="submit" style="width:100%" data-i18n="savePurchase">ক্রয় সংরক্ষণ ও স্টক আপডেট
+              করুন</button>
+          </div>
+        </form>
+        <div class="section-head" style="margin-top:24px">
+          <h2 data-i18n="purchaseHistory">সাম্প্রতিক ক্রয়</h2>
+        </div>
+        <div class="panel" id="purchaseHistoryList"></div>
+      </section>
+
+      <section class="page" id="debit-creditPage">
+        <div class="page-title">
+          <h2 data-i18n="debitCreditPageTitle">ডেবিট-ক্রেডিট</h2>
+          <span class="badge" data-i18n="dailyArchiveHint">দৈনিক বিক্রির হিসাব</span>
+        </div>
+        <div class="panel" id="dailySummaryHistory"></div>
+      </section>
+
+      <section class="page" id="ledgerPage">
+        <div class="page-title">
+          <h2 data-i18n="ledgerPageTitle">বাকির খাতা</h2><button class="primary" data-i18n="addDueBtn"
+            onclick="openDueModal()">＋ বাকি যোগ</button>
+        </div>
+        <div class="metric" style="margin-bottom:14px">
+          <div class="metric-top"><span class="metric-icon">📒</span><span class="badge red"
+              data-i18n="payableBadge">পাওনা</span></div><small data-i18n="totalDueLabel">মোট বকেয়া টাকা</small><strong
+            id="ledgerTotal">৳ ২,৩৫০</strong>
+        </div>
+        <div class="searchbar"><span>⌕</span><input id="ledgerSearch" data-i18n-placeholder="searchCustomer"
+            placeholder="ক্রেতার নাম খুঁজুন..." oninput="renderLedger()"></div>
+        <div class="panel" id="ledgerList"></div>
+      </section>
+
+      <section class="page" id="ledger-detailPage">
+        <div class="page-title">
+          <h2 id="ledgerCustomerTitle" data-i18n="ledgerPageTitle">বাকির খাতা</h2>
+          <button class="secondary" type="button" onclick="showPage('ledger')" data-i18n="backToLedger">← বাকির খাতায় ফিরুন</button>
+        </div>
+        <div class="panel" id="ledgerCustomerDetails"></div>
+      </section>
+
+      <section class="page" id="ledger-profilePage">
+        <div class="page-title">
+          <h2 data-i18n="editCustomerProfile">ক্রেতার তথ্য আপডেট</h2>
+          <button class="secondary" type="button" onclick="returnToLedgerCustomer()" data-i18n="cancelEdit">বাতিল</button>
+        </div>
+        <form class="form-card" id="ledgerProfileForm" onsubmit="saveLedgerCustomerProfile(event)">
+          <div class="field"><label for="ledgerProfileName" data-i18n="profileCustomerName">ক্রেতার নাম</label><input id="ledgerProfileName" name="name" required></div>
+          <div class="field"><label for="ledgerProfilePhone" data-i18n="profileCustomerPhone">মোবাইল নম্বর</label><input id="ledgerProfilePhone" name="phone" inputmode="tel" placeholder="01XXXXXXXXX"></div>
+          <div class="field"><label for="ledgerProfileAddress" data-i18n="customerAddress">ঠিকানা</label><input id="ledgerProfileAddress" name="address"></div>
+          <div class="field"><label for="ledgerProfileNotes" data-i18n="customerNotes">নোট</label><textarea id="ledgerProfileNotes" name="notes" rows="3"></textarea></div>
+          <button class="primary" type="submit" style="width:100%" data-i18n="saveCustomerProfile">তথ্য সংরক্ষণ করুন</button>
+        </form>
+      </section>
+
+      <section class="page" id="settingsPage">
+        <div class="page-title">
+          <h2 data-i18n="settingsPageTitle">দোকানের সেটিংস</h2>
+          <button class="secondary" type="button" onclick="showPage('home')" data-i18n="settingsDone">হোমে ফিরুন</button>
+        </div>
+        <div class="settings-hero">
+          <div class="settings-hero-top"><div class="settings-hero-icon">⚙</div><div>
+            <h3 data-i18n="settingsHeroTitle">আপনার দোকান, আপনার নিয়ন্ত্রণে</h3>
+            <p data-i18n="settingsHeroSubtitle">দোকানের পরিচিতি, ভাষা ও দৈনন্দিন অ্যাপ কন্ট্রোল এক জায়গায় পরিচালনা করুন।</p>
+          </div></div>
+        </div>
+        <form id="settingsForm" onsubmit="saveShopName(event)">
+          <div class="settings-card">
+            <h3 class="settings-card-title"><span>🏪</span><span data-i18n="storeProfileTitle">দোকানের পরিচিতি</span></h3>
+            <div class="field"><label for="settingsShopName" data-i18n="settingsStoreName">দোকানের নাম</label><input id="settingsShopName" name="shop" required></div>
+            <div class="field"><label for="settingsLanguage" data-i18n="settingsLanguage">অ্যাপের ভাষা</label><select id="settingsLanguage" name="language"><option value="bn">বাংলা (Bangla)</option><option value="en">English</option></select></div>
+          </div>
+          <div class="settings-card">
+            <h3 class="settings-card-title"><span>🎛️</span><span data-i18n="appControlsTitle">অ্যাপ কন্ট্রোল</span></h3>
+            <div class="toggle-row"><div class="toggle-copy"><strong data-i18n="settingsStoreOpen">দোকান চালু</strong><small data-i18n="settingsStoreOpenHint">হোম স্ক্রিনে দোকানের স্ট্যাটাস দেখাবে</small></div><label class="switch"><input type="checkbox" name="storeOpen"><span class="slider"></span></label></div>
+            <div class="toggle-row"><div class="toggle-copy"><strong data-i18n="settingsLowStock">কম স্টক সতর্কতা</strong><small data-i18n="settingsLowStockHint">৫ বা তার কম পণ্যে নোটিশ দেখাবে</small></div><label class="switch"><input type="checkbox" name="lowStockAlert"><span class="slider"></span></label></div>
+            <div class="toggle-row"><div class="toggle-copy"><strong data-i18n="settingsDailySummary">দৈনিক সারাংশ</strong><small data-i18n="settingsDailySummaryHint">হোমে ডেইলি বিক্রির চেক রাখে</small></div><label class="switch"><input type="checkbox" name="dailySummary"><span class="slider"></span></label></div>
+            <div class="toggle-row"><div class="toggle-copy"><strong data-i18n="settingsWeather">আবহাওয়া দেখান</strong><small data-i18n="settingsWeatherHint">ব্যালান্স কার্ডে আবহাওয়া দেখাবে</small></div><label class="switch"><input type="checkbox" name="showWeather"><span class="slider"></span></label></div>
+            <div class="toggle-row"><div class="toggle-copy"><strong data-i18n="settingsQuickSale">দ্রুত বিক্রি বাটন</strong><small data-i18n="settingsQuickSaleHint">হোম স্ক্রিনে দ্রুত বিক্রির শর্টকাট রাখে</small></div><label class="switch"><input type="checkbox" name="quickSalesShortcut"><span class="slider"></span></label></div>
+          </div>
+          <div class="settings-card">
+            <h3 class="settings-card-title"><span>ℹ️</span><span data-i18n="aboutAppTitle">অ্যাপ সম্পর্কে</span></h3>
+            <div class="settings-info-row"><span data-i18n="settingsShopLabel">দোকান</span><strong id="settingsShopPreview">Mudi Store</strong></div>
+            <div class="settings-info-row"><span data-i18n="settingsDataLabel">ডেটা সংরক্ষণ</span><strong data-i18n="settingsLocalStorage">এই ডিভাইসের ব্রাউজারে</strong></div>
+            <div class="notice" data-i18n="settingsBackupNotice">ডেটা এই ব্রাউজারের localStorage-এ থাকে। ব্রাউজারের ডেটা মুছলে তথ্য হারাতে পারে।</div>
+          </div>
+          <button class="primary" type="submit" style="width:100%" data-i18n="settingsSaveButton">সেটিংস সংরক্ষণ করুন</button>
+        </form>
+      </section>
+
+      <section class="page" id="user-profilePage">
+        <div class="page-title">
+          <h2 data-i18n="userProfileTitle">ব্যবহারকারীর প্রোফাইল</h2>
+          <button class="secondary" type="button" onclick="showPage('home')" data-i18n="profileBackHome">হোমে ফিরুন</button>
+        </div>
+        <div class="profile-hero">
+          <div class="profile-avatar" id="profileAvatar">মু</div>
+          <h3 id="profileDisplayName">দোকান মালিক</h3>
+          <p id="profileDisplayRole">দোকান মালিক</p>
+        </div>
+        <div class="profile-summary-grid">
+          <div class="profile-summary-item"><small data-i18n="profileShopLabel">দোকান</small><strong id="profileShopSummary">Mudi Store</strong></div>
+          <div class="profile-summary-item"><small data-i18n="profileStoreStatus">দোকানের অবস্থা</small><strong id="profileStatusSummary">চালু</strong></div>
+        </div>
+        <form class="form-card" id="userProfileForm" onsubmit="saveUserProfile(event)">
+          <h3 class="settings-card-title"><span>👤</span><span data-i18n="profilePersonalInfo">ব্যক্তিগত তথ্য</span></h3>
+          <div class="field"><label for="profileName" data-i18n="profileFullName">পূর্ণ নাম</label><input id="profileName" name="name" autocomplete="name" required placeholder="যেমন: আব্দুল করিম"></div>
+          <div class="field"><label for="profileRole" data-i18n="profileRoleLabel">পদবি / ভূমিকা</label><select id="profileRole" name="role"><option value="owner" data-i18n="profileRoleOwner">দোকান মালিক</option><option value="manager" data-i18n="profileRoleManager">ম্যানেজার</option><option value="staff" data-i18n="profileRoleStaff">কর্মচারী</option></select></div>
+          <div class="field"><label for="profilePhone" data-i18n="profilePhoneLabel">মোবাইল নম্বর</label><input id="profilePhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX"></div>
+          <div class="field"><label for="profileEmail" data-i18n="profileEmailLabel">ইমেইল (ঐচ্ছিক)</label><input id="profileEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com"></div>
+          <div class="field"><label for="profileAddress" data-i18n="profileAddressLabel">ঠিকানা</label><textarea id="profileAddress" name="address" rows="3" autocomplete="street-address" placeholder="আপনার ঠিকানা"></textarea></div>
+          <button class="primary" type="submit" style="width:100%" data-i18n="profileSaveButton">প্রোফাইল সংরক্ষণ করুন</button>
+        </form>
+      </section>
+
+      <section class="page" id="reportsPage">
+        <div class="page-title">
+          <h2 data-i18n="businessReport">ব্যবসার রিপোর্ট</h2><button class="secondary" data-i18n="printBtn"
+            onclick="window.print()">প্রিন্ট</button>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">৳</span></div><small data-i18n="totalSalesLabel">মোট
+              বিক্রি</small><strong id="reportSales">৳ ৪,৮৫০</strong>
+          </div>
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">↗</span></div><small data-i18n="profitLabel">আনুমানিক
+              লাভ</small><strong id="reportProfit">৳ ৬৮০</strong>
+          </div>
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">📦</span></div><small data-i18n="productCountLabel">পণ্যের
+              সংখ্যা</small><strong id="reportProducts">২৪টি</strong>
+          </div>
+          <div class="metric">
+            <div class="metric-top"><span class="metric-icon">📒</span></div><small data-i18n="totalDueLabel2">মোট
+              বাকি</small><strong id="reportDue">৳ ২,৩৫০</strong>
+          </div>
+        </div>
+        <div class="section-head" style="margin-top:24px">
+          <h2 data-i18n="summaryToday">আজকের সারাংশ</h2>
+        </div>
+        <div class="panel">
+          <div class="sale-row">
+            <div class="item-info"><strong data-i18n="totalTransactions">মোট লেনদেন</strong><small
+                data-i18n="todaySalesCount">আজকের বিক্রির সংখ্যা</small></div>
+            <div class="item-price" id="transactionCount">৩টি</div>
+          </div>
+          <div class="sale-row">
+            <div class="item-info"><strong data-i18n="lowStockTitle">কম স্টক</strong><small
+                data-i18n="lowStockHint">স্টক ৫ বা তার কম</small></div>
+            <div class="item-price" id="lowStockCount">২টি</div>
+          </div>
+        </div>
+        <div class="notice" data-i18n="prototypeNotice">এটি একটি UI prototype। বাস্তব ব্যবহারের আগে ডেটা ব্যাকআপ, নিরাপদ
+          সংরক্ষণ এবং পূর্ণ হিসাব যাচাই যোগ করুন।</div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" id="shopBottomNav">
+      <button class="nav-btn active" data-page="home" onclick="showPage('home')"><span class="nav-ico">⌂</span><span
+          data-i18n="navHome">হোম</span></button>
+      <button class="nav-btn" data-page="sales" onclick="showPage('sales')"><span class="nav-ico">🛒</span><span
+          data-i18n="navSales">বিক্রি</span></button>
+      <button class="nav-btn" data-page="stock" onclick="showPage('stock')"><span class="nav-ico">▦</span><span
+          data-i18n="navStock">স্টক</span></button>
+      <button class="nav-btn" data-page="ledger" onclick="showPage('ledger')"><span class="nav-ico">📒</span><span
+          data-i18n="navLedger">বাকি</span></button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" onclick="backdropClose(event)">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">নতুন পণ্য</h3><button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="scanner-app" id="scannerModule" hidden data-screen="scanner" aria-label="Barcode and QR scanner">
+    <div class="scanner-shell">
+      <section class="scanner-screen scan-camera-screen" id="scanCameraScreen">
+        <div class="scan-camera-head"><button class="scan-icon-btn" type="button" aria-label="Close scanner"
+            onclick="closeBarcodeScannerPage()"><svg viewBox="0 0 24 24">
+              <path d="m6 6 12 12M18 6 6 18" />
+            </svg></button><span class="scan-camera-head-title">Scan Barcode &amp; QR</span><button
+            class="scan-icon-btn" id="scanTorchButton" type="button" aria-label="Toggle flashlight"
+            onclick="toggleScannerTorch()"><svg viewBox="0 0 24 24">
+              <path d="M9 2h6l-1 6 4 4H6l4-4-1-6ZM10 12v8h4v-8M10 22h4" />
+            </svg></button></div>
+        <div class="scan-camera-preview"><video id="barcodeVideo" autoplay playsinline muted></video>
+          <div class="scan-camera-placeholder" id="scannerPlaceholder">Camera preview will appear here<br>Allow camera
+            permission to begin scanning</div>
+          <div class="scan-target"><i class="scan-corner tl"></i><i class="scan-corner tr"></i><i
+              class="scan-corner bl"></i><i class="scan-corner br"></i></div>
+          <div class="scan-camera-message" id="scannerHint">Requesting camera access…</div>
+        </div>
+        <div class="scan-camera-panel">
+          <div class="scan-camera-help" id="scanCameraHelp">Point the camera at a barcode or QR code</div>
+          <div class="scan-session-feed" id="scanSessionFeed" aria-live="polite"><div class="scan-session-empty">Scanned items will appear here</div></div>
+          <div class="scan-manual-row"><input id="manualBarcode" autocomplete="off" inputmode="text"
+              placeholder="Enter barcode or QR content"><button type="button"
+              onclick="submitManualBarcode()">Find</button></div>
+            <button class="scan-camera-retry" type="button" onclick="retryScannerCamera()">Start / restart camera</button>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function loadStoredJSON(key, fallback) {
+      try { const raw = localStorage.getItem(key); if (!raw || raw === 'undefined' || raw === 'null') return fallback; return JSON.parse(raw) } catch (error) { return fallback }
+    }
+    const getLocale = () => (currentLanguage === 'en' ? 'en-US' : 'bn-BD');
+    const money = n => '৳ ' + Math.round(Number(n) || 0).toLocaleString(getLocale());
+    const bn = n => Number(n || 0).toLocaleString(getLocale());
+    const defaultProducts = [
+      { id: 1, name: 'Rice', price: 72, cost: 62, stock: 32, unit: 'kg', emoji: '🍚' },
+      { id: 2, name: 'Lentils', price: 130, cost: 112, stock: 18, unit: 'kg', emoji: '🫘' },
+      { id: 3, name: 'Soybean Oil', price: 175, cost: 158, stock: 12, unit: 'L', emoji: '🫗' },
+      { id: 4, name: 'Sugar', price: 140, cost: 125, stock: 4, unit: 'kg', emoji: '🧂' },
+      { id: 5, name: 'Eggs', price: 15, cost: 12, stock: 45, unit: 'pcs', emoji: '🥚' },
+      { id: 6, name: 'Biscuits', price: 10, cost: 7, stock: 3, unit: 'pack', emoji: '🍪' },
+      { id: 7, name: 'Powder Milk', price: 95, cost: 82, stock: 10, unit: 'pack', emoji: '🥛' },
+      { id: 8, name: 'Bath Soap', price: 45, cost: 36, stock: 15, unit: 'pcs', emoji: '🧼' }
+    ];
+    let products = loadStoredJSON('mudimobile_products', defaultProducts);
+    let cart = [];
+    let barcodeStream = null;
+    let barcodeScanTimer = null;
+    let barcodeScanBusy = false;
+    let barcodeReaderControls = null;
+    let barcodeLibraryPromise = null;
+    let barcodeScannerMode = 'sale';
+    let productDraftForBarcode = null;
+    let purchaseBarcodeTargetId = null;
+    let scannerReturnPage = 'sales';
+    let scannerSession = [];
+    let scannerLastSeen = {};
+    let scannerLastActiveCode = '';
+    let scannerMissFrames = 0;
+    let scannerResult = null;
+    localStorage.removeItem('mudimobile_scan_history');
+    let scannerTorchOn = false;
+    let qrPasswordVisible = false;
+    let sales = loadStoredJSON('mudimobile_sales', []);
+    let purchases = loadStoredJSON('mudimobile_purchases', []);
+    let ledgerCollections = loadStoredJSON('mudimobile_ledgerCollections', []);
+    if (!Array.isArray(ledgerCollections)) ledgerCollections = [];
+    let ledger = loadStoredJSON('mudimobile_ledger', [
+      { id: 1, name: 'Suman Mia', phone: '017XXXXXXXX', due: 850 },
+      { id: 2, name: 'Mina Begum', phone: '018XXXXXXXX', due: 1200 },
+      { id: 3, name: 'Rahim Uddin', phone: '019XXXXXXXX', due: 300 }
+    ]);
+    let dailySummaries = loadStoredJSON('mudimobile_dailySummaries', []);
+    if (!Array.isArray(dailySummaries)) dailySummaries = [];
+    let activeLedgerCustomerId = null;
+    let userProfile = { name: '', role: 'owner', phone: '', email: '', address: '', ...loadStoredJSON('mudimobile_userProfile', {}) };
+    let dailyTotalsDate = localStorage.getItem('mudimobile_dailyTotalsDate') || getLocalDateKey();
+    let totalSales = Number(localStorage.getItem('mudimobile_totalSales') ?? 4850);
+    let totalProfit = Number(localStorage.getItem('mudimobile_totalProfit') ?? 680);
+    const defaultSettings = {
+      storeOpen: true,
+      lowStockAlert: true,
+      dailySummary: true,
+      showWeather: true,
+      quickSalesShortcut: true,
+      language: 'bn',
+      scanSound: true,
+      scanVibration: true,
+    };
+    let settings = { ...defaultSettings, ...loadStoredJSON('mudimobile_settings', {}) };
+    let currentLanguage = settings.language || 'bn';
+    const legacyCustomerMap = { 'সুমন মিয়া': 'Suman Mia', 'মিনা বেগম': 'Mina Begum', 'রহিম উদ্দিন': 'Rahim Uddin' };
+    function normalizeLegacyData() {
+      ledger = ledger.map(l => ({
+        ...l,
+        name: legacyCustomerMap[l.name] || l.name
+      }));
+      save();
+    }
+    normalizeLegacyData();
+    function migrateLedgerDueHistory() {
+      let changed = false;
+      sales.filter(sale => Number(sale.due) > 0).forEach(sale => {
+        const customer = ledger.find(entry => entry.name.toLowerCase() === String(sale.name || '').toLowerCase());
+        if (!customer) return;
+        customer.dueHistory = Array.isArray(customer.dueHistory) ? customer.dueHistory : [];
+        if (customer.dueHistory.some(entry => String(entry.id) === String(sale.id))) return;
+        const items = (sale.items || []).map(item => {
+          const product = products.find(entry => entry.id === item.id);
+          return { id: item.id, name: item.name || product?.name || (currentLanguage === 'en' ? 'Product' : 'পণ্য'), price: Number(item.price ?? product?.price) || 0, qty: Number(item.qty) || 0, unit: item.unit || product?.unit || '' };
+        });
+        customer.dueHistory.push({ id: sale.id, dateKey: sale.dateKey || getLocalDateKey(), createdAt: sale.createdAt || '', time: sale.time || '', name: sale.name || customer.name, total: Number(sale.total) || 0, due: Number(sale.due) || 0, items });
+        changed = true;
+      });
+      if (changed) save();
+    }
+    migrateLedgerDueHistory();
+    const translations = {
+      bn: {
+        welcome: 'স্বাগতম 👋',
+        storeOpenText: 'দোকান চালু',
+        storeClosedText: 'দোকান বন্ধ',
+        todaySummary: 'আজকের হিসাব',
+        viewDetails: 'বিস্তারিত দেখুন →',
+        todayTag: 'আজ',
+        totalSalesLabel: 'মোট বিক্রি',
+        approxTag: 'আনুমানিক',
+        profitLabel: 'মোট লাভ',
+        dueBadge: 'বাকি',
+        customerDueLabel: 'ক্রেতার কাছে পাওনা',
+        inStockTag: 'স্টকে আছে',
+        productTypeLabel: 'পণ্যের ধরন',
+        quickActions: 'দ্রুত কাজ',
+        newSale: 'নতুন বিক্রি',
+        addProduct: 'পণ্য যোগ',
+        barcodeTitle: 'বারকোড স্ক্যানার',
+        barcodeSubtitle: 'ক্যামেরা দিয়ে স্ক্যান করে পণ্য দ্রুত কার্টে যোগ করুন',
+        scanBarcode: 'স্ক্যান',
+        scannerPageTitle: 'বারকোড স্ক্যানার',
+        scannerBack: '← ফিরে যান',
+        scannedItems: 'স্ক্যান করা পণ্য',
+        findBarcode: 'খুঁজুন',
+        finishScanSession: 'স্ক্যান শেষ করুন',
+        clearScans: 'স্ক্যান তালিকা মুছুন',
+        cameraWait: 'ক্যামেরার অনুমতি চাওয়া হচ্ছে… অনুগ্রহ করে অনুমতি দিন।',
+        cameraReady: 'ক্যামেরা চালু। বারকোডটি ফ্রেমের মধ্যে ধরুন।',
+        barcodeLabel: 'বারকোড (ঐচ্ছিক)',
+        barcodePlaceholder: 'পণ্যের বারকোড লিখুন',
+        ledgerBook: 'বাকির খাতা',
+        purchaseStock: 'মাল কেনা',
+        purchasePageTitle: 'নতুন ক্রয়',
+        viewStockBtn: 'স্টক দেখুন',
+        purchaseHeroTitle: 'মাল কেনা ও স্টক আপডেট',
+        purchaseHeroSubtitle: 'সরবরাহকারী, পণ্য, পরিমাণ ও পেমেন্টের তথ্য একসাথে সংরক্ষণ করুন।',
+        supplierDetails: 'সরবরাহকারীর তথ্য',
+        supplierName: 'সরবরাহকারীর নাম',
+        supplierPhone: 'মোবাইল নম্বর',
+        invoiceNumber: 'চালান নম্বর',
+        purchaseDate: 'ক্রয়ের তারিখ',
+        purchaseItems: 'ক্রয় করা পণ্য',
+        purchaseProductType: 'পণ্যের ধরন',
+        existingProduct: 'আগের পণ্য',
+        newProduct: 'নতুন পণ্য',
+        selectProduct: 'পণ্য নির্বাচন',
+        newProductName: 'নতুন পণ্যের নাম',
+        sellingPrice: 'বিক্রি মূল্য (৳)',
+        productUnit: 'একক',
+        scanBarcode: 'স্ক্যান',
+        barcodeValue: 'বারকোড',
+        duplicateBarcode: 'এই বারকোডটি ইতিমধ্যে ব্যবহৃত হয়েছে',
+        addPurchaseItem: '＋ আরেকটি পণ্য যোগ করুন',
+        purchaseTotal: 'মোট ক্রয় মূল্য',
+        paymentDetails: 'পেমেন্টের তথ্য',
+        purchasePaymentStatus: 'পেমেন্টের অবস্থা',
+        paidStatus: 'পরিশোধিত',
+        partialStatus: 'আংশিক',
+        dueStatus: 'বাকি',
+        amountPaid: 'এখন পরিশোধ',
+        purchaseNotes: 'নোট',
+        savePurchase: 'ক্রয় সংরক্ষণ ও স্টক আপডেট করুন',
+        purchaseHistory: 'সাম্প্রতিক ক্রয়',
+        stockView: 'স্টক দেখুন',
+        reportLabel: 'রিপোর্ট',
+        recentSalesTitle: 'সাম্প্রতিক বিক্রি',
+        seeAll: 'সব দেখুন →',
+        newSalePage: 'নতুন বিক্রি',
+        clearCart: 'কার্ট খালি',
+        searchProduct: 'পণ্যের নাম লিখুন...',
+        stockPageTitle: 'পণ্যের স্টক',
+        addProductBtn: '＋ পণ্য',
+        searchProductStock: 'পণ্য খুঁজুন...',
+        ledgerPageTitle: 'বাকির খাতা',
+        addDueBtn: '＋ বাকি যোগ',
+        payableBadge: 'পাওনা',
+        totalDueLabel: 'মোট বকেয়া টাকা',
+        searchCustomer: 'ক্রেতার নাম খুঁজুন...',
+        businessReport: 'ব্যবসার রিপোর্ট',
+        printBtn: 'প্রিন্ট',
+        productCountLabel: 'পণ্যের সংখ্যা',
+        totalDueLabel2: 'মোট বাকি',
+        summaryToday: 'আজকের সারাংশ',
+        navHome: 'হোম',
+        navSales: 'বিক্রি',
+        navStock: 'স্টক',
+        navLedger: 'বাকি',
+        balanceTotalSales: 'আজকের মোট বিক্রি',
+        balanceSummaryText: 'আজকের বিক্রির সারাংশ',
+        quickSaleAction: 'বিক্রি করুন ↗',
+        salesListTitle: 'বিক্রির তালিকা',
+        cartEmpty: 'বিক্রির জন্য পণ্য বেছে নিন',
+        customerNameLabel: 'ক্রেতার নাম (ঐচ্ছিক)',
+        customerNamePlaceholder: 'যেমন: রহিম মিয়া',
+        paymentTypeLabel: 'পেমেন্টের ধরন',
+        paymentCash: 'নগদ',
+        paymentDue: 'বাকি',
+        paymentPartial: 'আংশিক পেমেন্ট',
+        paidNowLabel: 'এখন জমা (৳)',
+        paidNowPlaceholder: 'কত টাকা দিলেন?',
+        totalLabel: 'সর্বমোট',
+        completeSaleBtn: '✓ বিক্রি সম্পন্ন করুন',
+        stockTips: '💡 টিপস: পণ্য বিক্রি হলে স্টক স্বয়ংক্রিয়ভাবে কমবে। নতুন মাল কিনলে “মাল কেনা” থেকে স্টক বাড়ান।',
+        totalTransactions: 'মোট লেনদেন',
+        todaySalesCount: 'আজকের বিক্রির সংখ্যা',
+        lowStockTitle: 'কম স্টক',
+        lowStockHint: 'স্টক ৫ বা তার কম',
+        prototypeNotice: 'এটি একটি UI prototype। বাস্তব ব্যবহারের আগে ডেটা ব্যাকআপ, নিরাপদ সংরক্ষণ এবং পূর্ণ হিসাব যাচাই যোগ করুন।',
+        debitCreditPageTitle: 'ডেবিট-ক্রেডিট', dailyArchiveHint: 'দৈনিক বিক্রির হিসাব',
+        backToLedger: '← বাকির খাতায় ফিরুন', ledgerDueTotal: 'সর্বমোট বাকি', ledgerCreditHistory: 'বাকির বিক্রির তালিকা',
+        editCustomerProfile: 'ক্রেতার তথ্য আপডেট', cancelEdit: 'বাতিল', profileCustomerName: 'ক্রেতার নাম', profileCustomerPhone: 'মোবাইল নম্বর', customerAddress: 'ঠিকানা', customerNotes: 'নোট', saveCustomerProfile: 'তথ্য সংরক্ষণ করুন',
+        todayLedgerTitle: 'আজকের বাকির হিসাব', todayLedgerCardHint: 'আজকের বাকি ও জমার বিবরণ দেখুন', todayLedgerModalTitle: 'আজকের বাকির লেনদেন', creditAddedToday: 'আজ নতুন বাকি', collectedToday: 'আজ আদায়', currentTotalDue: 'বর্তমান মোট বাকি', creditSalesToday: 'আজকের বাকির বিক্রি', collectionsToday: 'আজকের আদায়', noCreditToday: 'আজ কোনো বাকি বিক্রি হয়নি', noCollectionsToday: 'আজ কোনো বাকি আদায় হয়নি',
+        settingsPageTitle: 'দোকানের সেটিংস', settingsDone: 'হোমে ফিরুন', settingsHeroTitle: 'আপনার দোকান, আপনার নিয়ন্ত্রণে', settingsHeroSubtitle: 'দোকানের পরিচিতি, ভাষা ও দৈনন্দিন অ্যাপ কন্ট্রোল এক জায়গায় পরিচালনা করুন।', storeProfileTitle: 'দোকানের পরিচিতি', settingsStoreName: 'দোকানের নাম', settingsLanguage: 'অ্যাপের ভাষা', appControlsTitle: 'অ্যাপ কন্ট্রোল', settingsStoreOpen: 'দোকান চালু', settingsStoreOpenHint: 'হোম স্ক্রিনে দোকানের স্ট্যাটাস দেখাবে', settingsLowStock: 'কম স্টক সতর্কতা', settingsLowStockHint: '৫ বা তার কম পণ্যে নোটিশ দেখাবে', settingsDailySummary: 'দৈনিক সারাংশ', settingsDailySummaryHint: 'হোমে ডেইলি বিক্রির চেক রাখে', settingsWeather: 'আবহাওয়া দেখান', settingsWeatherHint: 'ব্যালান্স কার্ডে আবহাওয়া দেখাবে', settingsQuickSale: 'দ্রুত বিক্রি বাটন', settingsQuickSaleHint: 'হোম স্ক্রিনে দ্রুত বিক্রির শর্টকাট রাখে', aboutAppTitle: 'অ্যাপ সম্পর্কে', settingsShopLabel: 'দোকান', settingsDataLabel: 'ডেটা সংরক্ষণ', settingsLocalStorage: 'এই ডিভাইসের ব্রাউজারে', settingsBackupNotice: 'ডেটা এই ব্রাউজারের localStorage-এ থাকে। ব্রাউজারের ডেটা মুছলে তথ্য হারাতে পারে।', settingsSaveButton: 'সেটিংস সংরক্ষণ করুন',
+        userProfileTitle: 'ব্যবহারকারীর প্রোফাইল', profileBackHome: 'হোমে ফিরুন', profileShopLabel: 'দোকান', profileStoreStatus: 'দোকানের অবস্থা', profilePersonalInfo: 'ব্যক্তিগত তথ্য', profileFullName: 'পূর্ণ নাম', profileRoleLabel: 'পদবি / ভূমিকা', profileRoleOwner: 'দোকান মালিক', profileRoleManager: 'ম্যানেজার', profileRoleStaff: 'কর্মচারী', profilePhoneLabel: 'মোবাইল নম্বর', profileEmailLabel: 'ইমেইল (ঐচ্ছিক)', profileAddressLabel: 'ঠিকানা', profileSaveButton: 'প্রোফাইল সংরক্ষণ করুন'
+      },
+      en: {
+        welcome: 'Welcome 👋',
+        storeOpenText: 'Store Open',
+        storeClosedText: 'Store Closed',
+        todaySummary: 'Today\'s Summary',
+        viewDetails: 'View Details →',
+        todayTag: 'Today',
+        totalSalesLabel: 'Total Sales',
+        approxTag: 'Approx.',
+        profitLabel: 'Net Profit',
+        dueBadge: 'Due',
+        customerDueLabel: 'Customer Receivables',
+        inStockTag: 'In Stock',
+        productTypeLabel: 'Product Types',
+        quickActions: 'Quick Actions',
+        newSale: 'New Sale',
+        addProduct: 'Add Product',
+        barcodeTitle: 'Barcode scanner',
+        barcodeSubtitle: 'Scan a product to add it to the cart instantly',
+        scanBarcode: 'Scan',
+        scannerPageTitle: 'Barcode Scanner',
+        scannerBack: '← Back',
+        scannedItems: 'Scanned products',
+        findBarcode: 'Find',
+        finishScanSession: 'Finish scanning',
+        clearScans: 'Clear scan list',
+        cameraWait: 'Requesting camera access… Please allow camera permission.',
+        cameraReady: 'Camera is on. Hold a barcode inside the frame.',
+        barcodeLabel: 'Barcode (optional)',
+        barcodePlaceholder: 'Enter product barcode',
+        ledgerBook: 'Ledger',
+        purchaseStock: 'Purchase',
+        purchasePageTitle: 'Record Purchase',
+        viewStockBtn: 'View Stock',
+        purchaseHeroTitle: 'Purchase stock & update inventory',
+        purchaseHeroSubtitle: 'Save supplier, product, quantity, and payment details together.',
+        supplierDetails: 'Supplier details',
+        supplierName: 'Supplier name',
+        supplierPhone: 'Mobile number',
+        invoiceNumber: 'Invoice number',
+        purchaseDate: 'Purchase date',
+        purchaseItems: 'Purchased products',
+        purchaseProductType: 'Product type',
+        existingProduct: 'Existing product',
+        newProduct: 'New product',
+        selectProduct: 'Select product',
+        newProductName: 'New product name',
+        sellingPrice: 'Selling price (৳)',
+        productUnit: 'Unit',
+        scanBarcode: 'Scan',
+        barcodeValue: 'Barcode',
+        duplicateBarcode: 'This barcode is already in use',
+        addPurchaseItem: '＋ Add another product',
+        purchaseTotal: 'Purchase total',
+        paymentDetails: 'Payment details',
+        purchasePaymentStatus: 'Payment status',
+        paidStatus: 'Paid',
+        partialStatus: 'Partial',
+        dueStatus: 'Due',
+        amountPaid: 'Amount paid now',
+        purchaseNotes: 'Notes',
+        savePurchase: 'Save purchase & update stock',
+        purchaseHistory: 'Recent purchases',
+        stockView: 'Stock',
+        reportLabel: 'Reports',
+        recentSalesTitle: 'Recent Sales',
+        seeAll: 'See All →',
+        newSalePage: 'New Sale',
+        clearCart: 'Clear Cart',
+        searchProduct: 'Search product name...',
+        stockPageTitle: 'Stock',
+        addProductBtn: '＋ Add',
+        searchProductStock: 'Search products...',
+        ledgerPageTitle: 'Ledger',
+        addDueBtn: '＋ Add Due',
+        payableBadge: 'Receivable',
+        totalDueLabel: 'Total Due',
+        searchCustomer: 'Search customer name...',
+        businessReport: 'Business Report',
+        printBtn: 'Print',
+        productCountLabel: 'Products Count',
+        totalDueLabel2: 'Total Due',
+        summaryToday: 'Today\'s Summary',
+        navHome: 'Home',
+        navSales: 'Sales',
+        navStock: 'Stock',
+        navLedger: 'Due',
+        balanceTotalSales: 'Today\'s Total Sales',
+        balanceSummaryText: 'Today\'s sales summary',
+        quickSaleAction: 'Sell Now ↗',
+        salesListTitle: 'Sales List',
+        cartEmpty: 'Choose products for sale',
+        customerNameLabel: 'Customer name (optional)',
+        customerNamePlaceholder: 'e.g. Rahim Mia',
+        paymentTypeLabel: 'Payment type',
+        paymentCash: 'Cash',
+        paymentDue: 'Due',
+        paymentPartial: 'Partial payment',
+        paidNowLabel: 'Amount paid now (৳)',
+        paidNowPlaceholder: 'How much did they pay?',
+        totalLabel: 'Total',
+        completeSaleBtn: '✓ Complete Sale',
+        stockTips: '💡 Tip: stock decreases automatically when products are sold. To add more stock, use “Purchase”.',
+        totalTransactions: 'Total transactions',
+        todaySalesCount: 'Number of sales today',
+        lowStockTitle: 'Low stock',
+        lowStockHint: 'Stock 5 or below',
+        prototypeNotice: 'This is a UI prototype. Before real use, add data backup, secure storage, and complete accounting checks.',
+        debitCreditPageTitle: 'Debit-Credit', dailyArchiveHint: 'Daily sales history',
+        backToLedger: '← Back to ledger', ledgerDueTotal: 'Total outstanding due', ledgerCreditHistory: 'Credit sale history',
+        editCustomerProfile: 'Update Customer Profile', cancelEdit: 'Cancel', profileCustomerName: 'Customer name', profileCustomerPhone: 'Mobile number', customerAddress: 'Address', customerNotes: 'Notes', saveCustomerProfile: 'Save Profile',
+        todayLedgerTitle: 'Today’s Ledger', todayLedgerCardHint: 'View today’s credit and collection details', todayLedgerModalTitle: 'Today’s Ledger Transactions', creditAddedToday: 'New credit today', collectedToday: 'Collected today', currentTotalDue: 'Current total due', creditSalesToday: 'Credit sales today', collectionsToday: 'Collections today', noCreditToday: 'No credit sales today', noCollectionsToday: 'No collections today',
+        settingsPageTitle: 'Store Settings', settingsDone: 'Back to Home', settingsHeroTitle: 'Your store, your control', settingsHeroSubtitle: 'Manage store identity, language, and everyday app controls in one place.', storeProfileTitle: 'Store Profile', settingsStoreName: 'Store name', settingsLanguage: 'App language', appControlsTitle: 'App Controls', settingsStoreOpen: 'Store open', settingsStoreOpenHint: 'Show store status on the home screen', settingsLowStock: 'Low-stock alert', settingsLowStockHint: 'Show an alert for products with 5 or fewer in stock', settingsDailySummary: 'Daily summary', settingsDailySummaryHint: 'Keep daily business checks on the home screen', settingsWeather: 'Show weather', settingsWeatherHint: 'Show weather on the sales balance card', settingsQuickSale: 'Quick sale button', settingsQuickSaleHint: 'Keep a quick-sale shortcut on the home screen', aboutAppTitle: 'About this app', settingsShopLabel: 'Store', settingsDataLabel: 'Data storage', settingsLocalStorage: 'This device’s browser', settingsBackupNotice: 'Data is stored in this browser’s localStorage. Clearing browser data may remove it.', settingsSaveButton: 'Save Settings',
+        userProfileTitle: 'User Profile', profileBackHome: 'Back to Home', profileShopLabel: 'Store', profileStoreStatus: 'Store status', profilePersonalInfo: 'Personal Information', profileFullName: 'Full name', profileRoleLabel: 'Position / role', profileRoleOwner: 'Shop owner', profileRoleManager: 'Manager', profileRoleStaff: 'Staff member', profilePhoneLabel: 'Mobile number', profileEmailLabel: 'Email (optional)', profileAddressLabel: 'Address', profileSaveButton: 'Save Profile'
+      }
+    };
+
+    function save() {
+      localStorage.setItem('mudimobile_products', JSON.stringify(products));
+      localStorage.setItem('mudimobile_sales', JSON.stringify(sales));
+      localStorage.setItem('mudimobile_purchases', JSON.stringify(purchases));
+      localStorage.setItem('mudimobile_ledgerCollections', JSON.stringify(ledgerCollections));
+      localStorage.setItem('mudimobile_ledger', JSON.stringify(ledger));
+      localStorage.setItem('mudimobile_totalSales', totalSales);
+      localStorage.setItem('mudimobile_totalProfit', totalProfit);
+      localStorage.setItem('mudimobile_dailySummaries', JSON.stringify(dailySummaries));
+      localStorage.setItem('mudimobile_dailyTotalsDate', dailyTotalsDate);
+      localStorage.setItem('mudimobile_settings', JSON.stringify(settings));
+      localStorage.setItem('mudimobile_userProfile', JSON.stringify(userProfile));
+    }
+    function showToast(msg) {
+      const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show');
+      clearTimeout(window.toastTimer); window.toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    function renderDateTime() {
+      const locale = currentLanguage === 'en' ? 'en-US' : 'bn-BD';
+      const now = new Date();
+      const weatherIcon = now.getHours() >= 18 || now.getHours() < 6 ? '🌙' : '☀️';
+      const weatherTemp = now.getHours() >= 18 || now.getHours() < 6 ? '28°' : '30°';
+      document.getElementById('todayDate').textContent = now.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'long' });
+      document.getElementById('balanceDate').textContent = now.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'short' });
+      document.getElementById('balanceTime').textContent = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('weatherBadge').textContent = `${weatherIcon} ${weatherTemp}`;
+    }
+    function getLocalDateKey(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    function getDailyLedgerData(dateKey = getLocalDateKey()) {
+      const creditSales = sales.filter(sale => Number(sale.due) > 0 && (sale.dateKey || (sale.createdAt ? getLocalDateKey(new Date(sale.createdAt)) : '')) === dateKey);
+      const collections = ledgerCollections.filter(entry => entry.dateKey === dateKey);
+      return {
+        creditSales,
+        collections,
+        creditTotal: creditSales.reduce((sum, sale) => sum + (Number(sale.due) || 0), 0),
+        collectedTotal: collections.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0),
+        currentDue: ledger.reduce((sum, customer) => sum + (Number(customer.due) || 0), 0)
+      };
+    }
+    function renderTodayLedgerCard() {
+      const summary = document.getElementById('todayLedgerSummary');
+      if (!summary) return;
+      const data = getDailyLedgerData();
+      summary.textContent = `${currentLanguage === 'en' ? 'Credit' : 'বাকি'} ${money(data.creditTotal)} · ${currentLanguage === 'en' ? 'Collected' : 'আদায়'} ${money(data.collectedTotal)} · ${currentLanguage === 'en' ? 'Total due' : 'মোট বাকি'} ${money(data.currentDue)}`;
+    }
+    function openTodayLedgerModal() {
+      const data = getDailyLedgerData(), locale = currentLanguage === 'en' ? 'en-US' : 'bn-BD';
+      const creditRows = data.creditSales.length ? data.creditSales.map(sale => {
+        const time = sale.createdAt ? new Date(sale.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) : (sale.time || '');
+        const items = (sale.items || []).map(item => `<div class="ledger-product-line"><span>${esc(item.name || (currentLanguage === 'en' ? 'Product' : 'পণ্য'))}<small>${money(item.price)} × ${bn(item.qty)} ${esc(item.unit || '')}</small></span><strong>${money((Number(item.price) || 0) * (Number(item.qty) || 0))}</strong></div>`).join('');
+        return `<div class="ledger-transaction"><div class="ledger-transaction-head"><div><strong>${esc(sale.name || (currentLanguage === 'en' ? 'Customer' : 'ক্রেতা'))}</strong><small>${esc(time)}</small></div><strong>${money(sale.due)}</strong></div>${items || `<div class="ledger-product-line">${currentLanguage === 'en' ? 'Product details unavailable' : 'পণ্যের তথ্য নেই'}</div>`}</div>`;
+      }).join('') : `<div class="empty">${currentLanguage === 'en' ? 'No credit sales today' : 'আজ কোনো বাকি বিক্রি হয়নি'}</div>`;
+      const collectionRows = data.collections.length ? data.collections.map(entry => {
+        const time = entry.createdAt ? new Date(entry.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) : '';
+        return `<div class="sale-row"><div class="item-icon">৳</div><div class="item-info"><strong>${esc(entry.name || (currentLanguage === 'en' ? 'Customer' : 'ক্রেতা'))}</strong><small>${esc(time)}</small></div><div class="item-price">${money(entry.amount)}</div></div>`;
+      }).join('') : `<div class="empty">${currentLanguage === 'en' ? 'No collections today' : 'আজ কোনো বাকি আদায় হয়নি'}</div>`;
+      openModal(currentLanguage === 'en' ? 'Today’s Ledger' : 'আজকের বাকির লেনদেন', `<div class="metrics" style="margin-bottom:14px"><div class="metric"><small>${currentLanguage === 'en' ? 'New credit today' : 'আজ নতুন বাকি'}</small><strong>${money(data.creditTotal)}</strong></div><div class="metric"><small>${currentLanguage === 'en' ? 'Collected today' : 'আজ আদায়'}</small><strong>${money(data.collectedTotal)}</strong></div></div><div class="metric" style="margin-bottom:16px"><small>${currentLanguage === 'en' ? 'Current total due' : 'বর্তমান মোট বাকি'}</small><strong>${money(data.currentDue)}</strong></div><h4>${currentLanguage === 'en' ? 'Credit sales today' : 'আজকের বাকির বিক্রি'}</h4>${creditRows}<h4 style="margin-top:18px">${currentLanguage === 'en' ? 'Collections today' : 'আজকের আদায়'}</h4>${collectionRows}`);
+    }
+    function renderDailySummaryHistory() {
+      const host = document.getElementById('dailySummaryHistory');
+      if (!host) return;
+      const sorted = [...dailySummaries].sort((a, b) => b.date.localeCompare(a.date));
+      host.innerHTML = sorted.length ? sorted.map(summary => {
+        const date = new Date(`${summary.date}T00:00:00`).toLocaleDateString(currentLanguage === 'en' ? 'en-US' : 'bn-BD', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        return `<div class="sale-row"><div class="item-icon">📅</div><div class="item-info"><strong>${esc(date)}</strong><small>${currentLanguage === 'en' ? 'Transactions' : 'লেনদেন'}: ${bn(summary.transactions)} · ${currentLanguage === 'en' ? 'Credit' : 'বাকি'}: ${money(summary.credit)} · ${currentLanguage === 'en' ? 'Received' : 'জমা'}: ${money(summary.received)}</small></div><div class="item-price">${money(summary.sales)}<small>${currentLanguage === 'en' ? 'Sales' : 'বিক্রি'} · ${currentLanguage === 'en' ? 'Profit' : 'লাভ'} ${money(summary.profit)}</small></div></div>`;
+      }).join('') : `<div class="empty">${currentLanguage === 'en' ? 'Previous daily sales and profit summaries will appear here after midnight.' : 'মধ্যরাতের পর আগের দিনের বিক্রি ও লাভের হিসাব এখানে দেখা যাবে।'}</div>`;
+    }
+    function checkDailyRollover() {
+      const today = getLocalDateKey();
+      if (dailyTotalsDate === today) return false;
+      const previousSales = sales.filter(sale => sale.dateKey === dailyTotalsDate);
+      const summary = {
+        date: dailyTotalsDate,
+        sales: totalSales,
+        profit: totalProfit,
+        transactions: previousSales.length,
+        credit: previousSales.reduce((sum, sale) => sum + (Number(sale.due) || 0), 0),
+        received: previousSales.reduce((sum, sale) => sum + (Number(sale.paid) || 0), 0)
+      };
+      const existing = dailySummaries.findIndex(item => item.date === dailyTotalsDate);
+      if (existing >= 0) dailySummaries[existing] = summary;
+      else dailySummaries.unshift(summary);
+      totalSales = 0;
+      totalProfit = 0;
+      dailyTotalsDate = today;
+      save();
+      updateStats();
+      renderDailySummaryHistory();
+      return true;
+    }
+    checkDailyRollover();
+    window.setInterval(checkDailyRollover, 30000);
+    showPage('home');
+    function showPage(page) {
+      document.body.classList.toggle('home-page', page === 'home');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(page + 'Page'); if (target) target.classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+      if (page === 'sales') { renderSaleProducts(); renderCart() }
+      if (page === 'stock') renderStock();
+      if (page === 'purchase') { renderPurchasePage() }
+      if (page === 'ledger') renderLedger();
+      if (page === 'reports') updateStats();
+      if (page === 'debit-credit') renderDailySummaryHistory();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function openModal(title, html) {
+      document.getElementById('modalTitle').textContent = title; document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('modalBackdrop').classList.add('show');
+    }
+    function closeModal() {
+      stopBarcodeScanner();
+      document.getElementById('modalBackdrop').classList.remove('show');
+      if (barcodeScannerMode === 'product' && productDraftForBarcode) {
+        const draft = productDraftForBarcode;
+        barcodeScannerMode = 'sale'; productDraftForBarcode = null;
+        openProductModal(draft);
+        return;
+      }
+      barcodeScannerMode = 'sale'; productDraftForBarcode = null;
+    }
+    function backdropClose(e) { if (e.target.id === 'modalBackdrop') closeModal() }
+    function openProductModal(draft = {}) {
+      const title = currentLanguage === 'en' ? 'Add Product' : 'নতুন পণ্য';
+      const labels = currentLanguage === 'en' ? { name: 'Product name', price: 'Selling price (৳)', cost: 'Purchase price (৳)', stock: 'Current stock', unit: 'Unit', notes: 'Additional notes', save: 'Save product' } : { name: 'পণ্যের নাম', price: 'বিক্রি মূল্য (৳)', cost: 'কেনার দাম (৳)', stock: 'বর্তমান স্টক', unit: 'একক', notes: 'অতিরিক্ত তথ্য', save: 'পণ্য সংরক্ষণ করুন' };
+      const itemUnits = currentLanguage === 'en' ? ['kg', 'g', 'L', 'pcs', 'pack', 'bottle'] : ['কেজি', 'গ্রাম', 'লিটার', 'পিস', 'প্যাকেট', 'বোতল'];
+      openModal(title, `<form id="productForm" onsubmit="addProduct(event)">
+ <div class="field"><label>${labels.name}</label><input name="name" required value="${esc(draft.name || '')}" placeholder="${currentLanguage === 'en' ? 'e.g. Rice' : 'যেমন: আটা'}"></div>
+ <div class="field"><label>${currentLanguage === 'en' ? 'Category' : 'ক্যাটাগরি'}</label><input name="category" value="${esc(draft.category || '')}" placeholder="${currentLanguage === 'en' ? 'e.g. Beverage' : 'যেমন: পানীয়'}"></div>
+ <div class="field"><label>${currentLanguage === 'en' ? 'Barcode (optional)' : 'বারকোড (ঐচ্ছিক)'}</label><div class="barcode-entry"><input id="productBarcodeInput" name="barcode" inputmode="numeric" value="${esc(draft.barcode || '')}" placeholder="${currentLanguage === 'en' ? 'Enter product barcode' : 'পণ্যের বারকোড লিখুন'}"><button type="button" class="secondary" onclick="openBarcodeScanner('product')">▦ ${currentLanguage === 'en' ? 'Scan' : 'স্ক্যান'}</button></div></div>
+ <div class="form-grid"><div class="field"><label>${labels.price}</label><input name="price" type="number" min="0.01" step="any" value="${esc(draft.price || '')}" required></div><div class="field"><label>${labels.cost}</label><input name="cost" type="number" min="0" step="any" value="${esc(draft.cost || '')}" required></div>
+ <div class="field"><label>${labels.stock}</label><input name="stock" type="number" min="0" step="any" value="${esc(draft.stock || '')}" required></div><div class="field"><label>${labels.unit}</label><select name="unit">${itemUnits.map(unit => `<option ${draft.unit === unit ? 'selected' : ''}>${unit}</option>`).join('')}</select></div></div>
+ <div class="field"><label>${labels.notes}</label><textarea name="notes" placeholder="${currentLanguage === 'en' ? 'e.g. Brand, color, delivery, notes...' : 'যেমন: ব্র্যান্ড, রং, ডেলিভারি, দরকারি নোট...'}">${esc(draft.notes || '')}</textarea></div>
+ <button class="primary" style="width:100%">${labels.save}</button></form>`);
+    }
+    function addProduct(e) {
+      e.preventDefault(); const f = new FormData(e.target);
+      const notes = String(f.get('notes') || '').trim();
+      const barcode = String(f.get('barcode') || '').trim();
+      if (barcode && products.some(p => String(p.barcode || '').trim() === barcode)) { showToast(currentLanguage === 'en' ? 'This barcode is already assigned to a product' : 'এই বারকোডটি অন্য পণ্যে যোগ করা আছে'); return }
+      createProductRecord({ name: String(f.get('name') || '').trim(), barcode, category: String(f.get('category') || '').trim(), price: Number(f.get('price')), cost: Number(f.get('cost')), stock: Number(f.get('stock')), unit: String(f.get('unit') || ''), emoji: '📦', notes });
+      save(); closeModal(); renderStock(); renderSaleProducts(); updateStats(); showToast(currentLanguage === 'en' ? 'Product added' : 'নতুন পণ্য যোগ হয়েছে'); e.target?.reset?.();
+    }
+    function createProductRecord(data) {
+      const product = { id: Date.now() + Math.floor(Math.random() * 100000), ...data }; products.unshift(product); return product;
+    }
+    function openScannerModule(mode = 'sale') {
+      const form = document.getElementById('productForm');
+      scannerReturnPage = document.querySelector('.page.active')?.id.replace('Page', '') || 'sales';
+      if (mode === 'product') {
+        productDraftForBarcode = form ? Object.fromEntries(new FormData(form).entries()) : {};
+        document.getElementById('modalBackdrop').classList.remove('show'); scannerReturnPage = 'stock';
+      }
+      if (mode === 'purchaseNewProduct') scannerReturnPage = 'purchase';
+      barcodeScannerMode = mode; purchaseBarcodeTargetId = null; scannerSession = []; scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0;
+      document.getElementById('scannerModule').hidden = false;
+      document.getElementById('shopBottomNav').style.display = 'none';
+      showScannerScreen('scanner'); startBarcodeScanner();
+    }
+    function openBarcodeScanner(mode = 'sale', targetId = null) {
+      if (mode === 'product') {
+        const form = document.getElementById('productForm'); productDraftForBarcode = form ? Object.fromEntries(new FormData(form).entries()) : {};
+        document.getElementById('modalBackdrop').classList.remove('show'); scannerReturnPage = 'stock';
+      } else if (mode === 'purchaseNewProduct') { scannerReturnPage = 'purchase'; purchaseBarcodeTargetId = targetId }
+      else if (document.querySelector('.page.active')) scannerReturnPage = document.querySelector('.page.active').id.replace('Page', '');
+      barcodeScannerMode = mode;
+      if (document.getElementById('scannerModule').hidden) { scannerSession = []; scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0 }
+      document.getElementById('scannerModule').hidden = false; document.getElementById('shopBottomNav').style.display = 'none';
+      showScannerScreen('scanner');
+      startBarcodeScanner();
+    }
+    function retryScannerCamera() {
+      stopBarcodeScanner();
+      const module = document.getElementById('scannerModule');
+      module.hidden = false;
+      showScannerScreen('scanner');
+      startBarcodeScanner();
+    }
+    function showScannerScreen(screen) {
+      const module = document.getElementById('scannerModule'); if (!module) return;
+      if (screen !== 'scanner') return;
+      module.hidden = false;
+      module.dataset.screen = 'scanner';
+      document.getElementById('scanCameraScreen')?.classList.add('active');
+      updateScannerScanInstructions();
+      renderScannerSession();
+    }
+    function updateScannerScanInstructions() {
+      const help = document.getElementById('scanCameraHelp'); if (!help) return;
+      help.textContent = 'Point the camera at a barcode or QR code.';
+    }
+    async function startBarcodeScanner() {
+      const hint = document.getElementById('scannerHint'), video = document.getElementById('barcodeVideo'), placeholder = document.getElementById('scannerPlaceholder');
+      const isEn = currentLanguage === 'en'; if (!video) return;
+      scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0;
+      if (!window.isSecureContext) { setCameraMessage(isEn ? 'Camera access requires HTTPS or localhost. Open this app securely, or enter the code manually.' : 'ক্যামেরা চালাতে HTTPS বা localhost প্রয়োজন। নিরাপদ ঠিকানা থেকে খুলুন অথবা কোড লিখুন।', true); return }
+      if (!navigator.mediaDevices?.getUserMedia) { setCameraMessage(isEn ? 'This browser does not support camera access. Enter the code manually.' : 'এই ব্রাউজারে ক্যামেরা সুবিধা নেই। কোডটি লিখুন।', true); return }
+      try {
+        setCameraMessage(isEn ? 'Requesting camera access… Allow camera permission to scan.' : 'ক্যামেরার অনুমতি চাওয়া হচ্ছে… স্ক্যান করতে অনুমতি দিন।');
+        // Call getUserMedia before any await so the request is tied to the user's Start Scanning tap.
+        const mobileConstraints = { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false };
+        try {
+          barcodeStream = await navigator.mediaDevices.getUserMedia(mobileConstraints);
+        } catch (firstCameraError) {
+          // Some mobile browsers reject ideal camera constraints; retry with the simplest supported request.
+          barcodeStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        }
+        if (document.getElementById('scannerModule').hidden || document.getElementById('scannerModule').dataset.screen !== 'scanner') { stopBarcodeScanner(); return }
+        video.setAttribute('playsinline', ''); video.setAttribute('autoplay', ''); video.muted = true;
+        video.srcObject = barcodeStream;
+        await video.play();
+        if (placeholder) placeholder.hidden = true;
+        let detector = null;
+        if ('BarcodeDetector' in window) {
+          const formats = await getNativeBarcodeFormats();
+          try { detector = new BarcodeDetector(formats.length ? { formats } : undefined) } catch (error) {
+            try { detector = new BarcodeDetector() } catch (unsupportedDetectorError) { detector = null }
+          }
+        }
+        if (detector) {
+          setCameraMessage('Camera is ready. Point it at a barcode or QR code.');
+          barcodeScanTimer = window.setInterval(async () => {
+            if (barcodeScanBusy || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+            barcodeScanBusy = true;
+            try { const detected = await detector.detect(video); if (detected?.length) { scannerMissFrames = 0; handleScannerDetection(detected[0].rawValue, detected[0].format, captureScannerFrame()) } else noteScannerFrameMiss() }
+            catch (error) { setCameraMessage('Unable to read this code. Adjust the camera and try again.', true) } finally { barcodeScanBusy = false }
+          }, 180);
+        } else {
+          try {
+            await loadBarcodeLibrary();
+          } catch (libraryError) {
+            setCameraMessage(isEn ? 'Camera is on, but the scanner engine could not load. Enter the barcode manually or check your internet connection and restart.' : 'ক্যামেরা চালু, কিন্তু স্ক্যানার লোড হয়নি। বারকোড লিখুন অথবা ইন্টারনেট সংযোগ দেখে আবার চালু করুন।', true);
+            return;
+          }
+          if (document.getElementById('scannerModule').dataset.screen !== 'scanner') return;
+          const ZX = window.ZXing, hints = {};
+          if (ZX.DecodeHintType && ZX.BarcodeFormat) {
+            const names = ['EAN_13', 'EAN_8', 'UPC_A', 'UPC_E', 'CODE_128', 'QR_CODE'];
+            hints[ZX.DecodeHintType.POSSIBLE_FORMATS] = names.map(name => ZX.BarcodeFormat[name]).filter(Boolean);
+            hints[ZX.DecodeHintType.TRY_HARDER] = true;
+          }
+          const reader = new ZX.BrowserMultiFormatReader(hints, 200);
+          setCameraMessage('Camera is ready. Point it at a barcode or QR code.');
+          const scanFrame = async () => {
+            if (document.getElementById('scannerModule').hidden || document.getElementById('scannerModule').dataset.screen !== 'scanner') return;
+            try { const result = await reader.decodeFromVideoElement(video); if (result) { scannerMissFrames = 0; handleScannerDetection(result.getText(), result.getBarcodeFormat?.(), captureScannerFrame()) } else noteScannerFrameMiss() }
+            catch (error) { if (error?.name === 'NotFoundException') noteScannerFrameMiss(); else if (!['ChecksumException', 'FormatException'].includes(error?.name)) setCameraMessage('Scanning issue. Keep the code in the frame.', true) }
+            if (!document.getElementById('scannerModule').hidden && document.getElementById('scannerModule').dataset.screen === 'scanner') barcodeScanTimer = window.setTimeout(scanFrame, 220);
+          }; scanFrame();
+        }
+      } catch (error) {
+        stopBarcodeScanner(); if (placeholder) placeholder.hidden = false;
+        const messages = isEn ? {
+          NotAllowedError: 'Camera permission is blocked. Allow camera access in your browser settings, then tap Start / restart camera.',
+          PermissionDeniedError: 'Camera permission is blocked. Allow camera access in your browser settings, then tap Start / restart camera.',
+          NotFoundError: 'No camera was found. Enter the barcode or QR content manually.',
+          DevicesNotFoundError: 'No camera was found. Enter the barcode or QR content manually.',
+          NotReadableError: 'The camera is in use by another app. Close that app and restart the camera.',
+          OverconstrainedError: 'This camera rejected the requested settings. Tap Start / restart camera to retry with basic settings.'
+        } : {
+          NotAllowedError: 'ক্যামেরার অনুমতি বন্ধ আছে। ব্রাউজার সেটিংসে অনুমতি দিয়ে Start / restart camera চাপুন।',
+          PermissionDeniedError: 'ক্যামেরার অনুমতি বন্ধ আছে। ব্রাউজার সেটিংসে অনুমতি দিয়ে Start / restart camera চাপুন।',
+          NotFoundError: 'ক্যামেরা পাওয়া যায়নি। বারকোড বা QR কোড হাতে লিখুন।',
+          DevicesNotFoundError: 'ক্যামেরা পাওয়া যায়নি। বারকোড বা QR কোড হাতে লিখুন।',
+          NotReadableError: 'অন্য অ্যাপে ক্যামেরা চালু আছে। সেটি বন্ধ করে আবার ক্যামেরা চালু করুন।',
+          OverconstrainedError: 'ক্যামেরার সেটিংস সমর্থিত নয়। সাধারণ সেটিংসে আবার চালাতে Start / restart camera চাপুন।'
+        };
+        const message = messages[error?.name] || (isEn ? `Camera could not start (${error?.name || 'error'}). Open this page over HTTPS, allow camera access, and retry.` : `ক্যামেরা চালু হয়নি (${error?.name || 'সমস্যা'}). HTTPS ঠিকানায় খুলে ক্যামেরার অনুমতি দিয়ে আবার চেষ্টা করুন।`);
+        setCameraMessage(message, true); if (placeholder) placeholder.hidden = false;
+      }
+    }
+    async function getNativeBarcodeFormats() {
+      if (!('BarcodeDetector' in window) || !BarcodeDetector.getSupportedFormats) return [];
+      try {
+        const supported = await BarcodeDetector.getSupportedFormats(); const wanted = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'qr_code'];
+        return wanted.filter(format => supported.includes(format))
+      } catch (error) { return [] }
+    }
+    function setCameraMessage(message, error = false) { const hint = document.getElementById('scannerHint'); if (hint) { hint.textContent = message; hint.classList.toggle('error', error) } }
+    async function toggleScannerTorch() {
+      const track = barcodeStream?.getVideoTracks?.()[0]; if (!track) { setCameraMessage('Flashlight is not available until the camera starts.', true); return }
+      try { const capabilities = track.getCapabilities?.(); if (!capabilities?.torch) { setCameraMessage('This camera does not support a flashlight.', true); return } scannerTorchOn = !scannerTorchOn; await track.applyConstraints({ advanced: [{ torch: scannerTorchOn }] }); document.getElementById('scanTorchButton')?.classList.toggle('active', scannerTorchOn) } catch (error) { setCameraMessage('Unable to toggle the flashlight on this device.', true) }
+    }
+    function loadBarcodeLibrary() {
+      if (window.ZXing?.BrowserMultiFormatReader) return Promise.resolve();
+      if (!barcodeLibraryPromise) {
+        barcodeLibraryPromise = new Promise((resolve, reject) => {
+          const sources = [
+            'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js',
+            'https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js'
+          ];
+          const loadSource = index => {
+            if (window.ZXing?.BrowserMultiFormatReader) { resolve(); return; }
+            if (index >= sources.length) { reject(new Error('Barcode library unavailable')); return; }
+            const script = document.createElement('script');
+            script.src = sources[index];
+            script.onload = () => window.ZXing?.BrowserMultiFormatReader ? resolve() : loadSource(index + 1);
+            script.onerror = () => loadSource(index + 1);
+            document.head.appendChild(script);
+          };
+          loadSource(0);
+        }).catch(error => { barcodeLibraryPromise = null; throw error });
+      }
+      return barcodeLibraryPromise;
+    }
+    function stopBarcodeScanner() {
+      if (barcodeScanTimer) { clearInterval(barcodeScanTimer); clearTimeout(barcodeScanTimer); barcodeScanTimer = null }
+      if (barcodeReaderControls) { try { barcodeReaderControls.stop() } catch (error) { } barcodeReaderControls = null }
+      if (barcodeStream) { barcodeStream.getTracks().forEach(track => track.stop()); barcodeStream = null }
+      const video = document.getElementById('barcodeVideo'); if (video) video.srcObject = null;
+      barcodeScanBusy = false; scannerTorchOn = false; document.getElementById('scanTorchButton')?.classList.remove('active');
+    }
+    function closeBarcodeScannerPage() {
+      closeScannerModule();
+    }
+    function closeScannerModule() {
+      const previousMode = barcodeScannerMode; let draft = productDraftForBarcode;
+      if (previousMode === 'product' && draft && scannerResult?.kind === 'barcode' && !scannerResult.found) draft = { ...draft, barcode: scannerResult.value };
+      stopBarcodeScanner(); document.getElementById('scannerModule').hidden = true; document.getElementById('shopBottomNav').style.display = ''; barcodeScannerMode = 'sale'; purchaseBarcodeTargetId = null; productDraftForBarcode = null; scannerResult = null;
+      if (previousMode === 'product' && draft) { showPage('stock'); openProductModal(draft) }
+      if (previousMode === 'purchaseNewProduct') showPage('purchase');
+    }
+    function finishBarcodeScanner() { closeScannerModule() }
+    function updateScannerClock() { return }
+    function playScanFeedback() {
+      if (settings.scanSound) { try { const AudioContext = window.AudioContext || window.webkitAudioContext; if (AudioContext) { const context = new AudioContext(), osc = context.createOscillator(), gain = context.createGain(); osc.frequency.value = 920; gain.gain.value = .035; osc.connect(gain); gain.connect(context.destination); osc.start(); osc.stop(context.currentTime + .075); osc.onended = () => context.close() } } catch (error) { } }
+      if (settings.scanVibration && navigator.vibrate) navigator.vibrate(35);
+    }
+    function captureScannerFrame() { try { const video = document.getElementById('barcodeVideo'); if (!video || video.videoWidth === 0) return ''; const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight; canvas.getContext('2d').drawImage(video, 0, 0); return canvas.toDataURL('image/jpeg', .62) } catch (error) { return '' } }
+    function handleScannerDetection(value, format = '', preview = '') {
+      const code = String(value || '').trim(); if (!code) return;
+      if (scannerLastActiveCode === code) return;
+      if (scannerLastActiveCode) scannerLastSeen = {};
+      if (scannerLastSeen[code]) return;
+      scannerLastActiveCode = code; scannerLastSeen[code] = true; scannerMissFrames = 0;
+      playScanFeedback(); processBarcode(code, format, preview);
+    }
+    function noteScannerFrameMiss() {
+      scannerMissFrames++;
+      if (scannerMissFrames >= 6) { scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0 }
+    }
+    function parseQrContent(value) {
+      const text = String(value || '').trim();
+      if (/^WIFI:/i.test(text)) {
+        const parts = {}; const body = text.replace(/^WIFI:/i, '').replace(/;;?$/, ''); let key = '', current = '', escaped = false;
+        for (const char of body) { if (escaped) { current += char; escaped = false; continue } if (char === '\\') { escaped = true; continue } if (char === ':' && !key) { key = current; current = ''; continue } if (char === ';' && key) { parts[key] = current; key = ''; current = ''; continue } current += char } if (key) parts[key] = current;
+        return { type: 'Wi-Fi Network', wifi: true, ssid: parts.S || '', password: parts.P || '', security: parts.T || 'Unknown', hidden: parts.H === 'true', valid: !!parts.S };
+      }
+      try { const url = new URL(text); if (['http:', 'https:'].includes(url.protocol)) return { type: 'Website Link', url: url.href, host: url.hostname, valid: true, safe: url.protocol === 'https:' && !url.username && !url.password }; if (url.protocol === 'mailto:') return { type: 'Email Link', url: url.href, valid: true, safe: false } } catch (error) { }
+      if (/^BEGIN:VCARD/i.test(text)) return { type: 'Contact', valid: true };
+      if (/^SMSTO:|^MATMSG:/i.test(text)) return { type: 'Message', valid: true };
+      return { type: text ? 'Text' : 'Invalid QR content', valid: !!text };
+    }
+    function addScannerSessionEntry(entry) {
+      scannerSession.unshift({ id: Date.now() + Math.floor(Math.random() * 100000), time: new Date().toISOString(), ...entry });
+      scannerSession = scannerSession.slice(0, 12);
+      renderScannerSession();
+    }
+    function renderScannerSession() {
+      const host = document.getElementById('scanSessionFeed');
+      if (!host) return;
+      if (!scannerSession.length) {
+        host.innerHTML = `<div class="scan-session-empty">${currentLanguage === 'en' ? 'Scanned items will appear here' : 'স্ক্যান করা পণ্য এখানে দেখা যাবে'}</div>`;
+        return;
+      }
+      const locale = currentLanguage === 'en' ? 'en-US' : 'bn-BD';
+      host.innerHTML = scannerSession.map(entry => {
+        const time = new Date(entry.time).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+        if (entry.kind === 'product') return `<div class="scan-session-entry"><strong>✓ ${esc(entry.name)}</strong><small>${money(entry.price)} · ${currentLanguage === 'en' ? 'Added to sale' : 'বিক্রিতে যোগ হয়েছে'} · ${esc(time)}</small></div>`;
+        if (entry.kind === 'qr') return `<div class="scan-session-entry"><strong>${esc(entry.parsed?.type || 'QR code')}</strong><small>${esc(entry.value)} · ${esc(time)}</small><button type="button" data-copy-session="${entry.id}">${currentLanguage === 'en' ? 'Copy content' : 'কনটেন্ট কপি'}</button></div>`;
+        if (entry.kind === 'unknown') return `<div class="scan-session-entry"><strong>⚠ ${currentLanguage === 'en' ? 'Barcode not registered' : 'বারকোড নিবন্ধিত নয়'}</strong><small>${esc(entry.value)} · ${esc(time)}</small><button type="button" data-register-session="${entry.id}">${currentLanguage === 'en' ? 'Register product' : 'পণ্য নিবন্ধন'}</button><div id="scanRegistrationHost-${entry.id}"></div></div>`;
+        return `<div class="scan-session-entry"><strong>${esc(entry.name || entry.value || '')}</strong><small>${esc(entry.message || '')} · ${esc(time)}</small></div>`;
+      }).join('');
+      host.querySelectorAll('[data-copy-session]').forEach(button => button.addEventListener('click', () => {
+        const entry = scannerSession.find(item => String(item.id) === button.dataset.copySession);
+        if (entry) copyText(entry.value);
+      }));
+      host.querySelectorAll('[data-register-session]').forEach(button => button.addEventListener('click', () => {
+        const entry = scannerSession.find(item => String(item.id) === button.dataset.registerSession);
+        if (!entry) return;
+        scannerResult = { kind: 'barcode', value: entry.value, found: false };
+        showRegistrationForm(entry.id);
+      }));
+    }
+    function processBarcode(value, format = '', preview = '') {
+      const code = String(value || '').trim(); if (!code) return;
+      const normalizedFormat = String(format || '').toLowerCase(); const isQr = normalizedFormat.includes('qr') || format === window.ZXing?.BarcodeFormat?.QR_CODE || barcodeScannerMode === 'qr' || /^WIFI:|^https?:\/\//i.test(code);
+      if (isQr) {
+        const parsed = parseQrContent(code);
+        scannerResult = { kind: 'qr', value: code, format: format || 'QR Code', parsed, preview };
+        addScannerSessionEntry({ kind: 'qr', value: code, parsed });
+        setCameraMessage(currentLanguage === 'en' ? 'QR scanned. Keep scanning or copy it from the session list.' : 'QR স্ক্যান হয়েছে। স্ক্যান চালিয়ে যান অথবা তালিকা থেকে কপি করুন।');
+        return;
+      }
+      if (barcodeScannerMode === 'product') productDraftForBarcode = { ...(productDraftForBarcode || {}), barcode: code };
+      const product = products.find(item => String(item.barcode || '').trim() === code) || null;
+      if (product) {
+        scannerResult = { kind: 'barcode', value: code, format: format || 'Barcode', product, found: true, preview, addedToSale: false };
+        if (barcodeScannerMode === 'sale') {
+          const cartQty = cart.reduce((sum, item) => sum + (item.id === product.id ? item.qty : 0), 0);
+          if (product.stock <= 0 || cartQty >= product.stock) {
+            setCameraMessage(currentLanguage === 'en' ? `${product.name} is out of stock. Keep scanning or enter another code.` : `${product.name}-এর স্টক নেই। অন্য পণ্য স্ক্যান করুন।`, true);
+            addScannerSessionEntry({ kind: 'warning', name: product.name, message: currentLanguage === 'en' ? 'Out of stock' : 'স্টক নেই' });
+            return;
+          }
+          addToCart(product.id);
+          scannerResult.addedToSale = true;
+          addScannerSessionEntry({ kind: 'product', name: product.name, price: product.price, productId: product.id });
+          setCameraMessage(currentLanguage === 'en' ? `${product.name} added to sale. Scan another product.` : `${product.name} বিক্রির তালিকায় যোগ হয়েছে। আরেকটি পণ্য স্ক্যান করুন।`);
+          showToast(`${product.name} added to sale · ${money(product.price)}`);
+          return;
+        }
+        if (barcodeScannerMode === 'purchaseNewProduct') {
+          useExistingProductForPurchase();
+          return;
+        }
+        addScannerSessionEntry({ kind: 'product', name: product.name, price: product.price, productId: product.id });
+        setCameraMessage(currentLanguage === 'en' ? `${product.name} is already registered. Scan another code.` : `${product.name} আগে থেকেই নিবন্ধিত। অন্য বারকোড স্ক্যান করুন।`, true);
+        return;
+      }
+      scannerResult = { kind: 'barcode', value: code, format: format || 'Barcode', product: null, found: false, preview, addedToSale: false };
+      addScannerSessionEntry({ kind: 'unknown', value: code });
+      setCameraMessage(currentLanguage === 'en' ? 'Unregistered barcode. You can register it below and continue scanning.' : 'বারকোডটি নিবন্ধিত নয়। নিচে পণ্য নিবন্ধন করে স্ক্যান চালিয়ে যান।', true);
+    }
+    function safeProductImage(product) { const image = String(product?.image || product?.thumbnail || ''); return /^(https:\/\/|data:image\/)/i.test(image) ? image : '' }
+    function productThumbMarkup(product) { const image = safeProductImage(product); return `<div class="scan-product-thumb">${image ? `<img src="${esc(image)}" alt="">` : esc(product?.emoji || '📦')}</div>` }
+    function renderScanResult() {
+      const host = document.getElementById('scanResultContent'), result = scannerResult; if (!host || !result) return;
+      if (!result.found) {
+        host.innerHTML = `<div class="scan-not-found"><div class="scan-not-found-icon">!</div><h3>Product Not Found</h3><p>This code is not registered in your Mudi inventory. You can register it now, or use it in your purchase entry.</p><div class="scan-data-row">Barcode<strong>${esc(result.value)}</strong></div></div><button class="scan-result-main" type="button" onclick="showRegistrationForm()">＋ Register Product</button>${barcodeScannerMode === 'purchaseNewProduct' ? '<button class="scan-result-main" type="button" onclick="useBarcodeForPurchase()">Use Barcode in Purchase</button>' : ''}<div id="scanRegistrationHost"></div><div class="scan-more-label">More Options</div><div class="scan-options"><button class="scan-option" type="button" onclick="copyScanResult()">▣ &nbsp;Copy barcode<span>›</span></button><button class="scan-option" type="button" onclick="scanAgain()">⟳ &nbsp;Scan Again<span>›</span></button></div>`; return;
+      }
+      const p = result.product;
+      const primaryAction = barcodeScannerMode === 'purchaseNewProduct' ? '<button class="scan-result-main" type="button" onclick="useExistingProductForPurchase()">＋ Add Existing Product to Purchase</button>' : `<button class="scan-result-main" type="button" onclick="addScannedProductToSale()">＋ ${result.addedToSale ? 'Add Another to Sale' : 'Add to Sale'}</button>`;
+      host.innerHTML = `<div class="scan-result-card"><div class="scan-result-product">${productThumbMarkup(p)}<div class="scan-product-copy"><strong>${esc(p.name)}</strong><small>${esc(p.category || 'Product')}</small></div></div><div class="scan-data-row">Barcode<strong>${esc(p.barcode || result.value)}</strong></div><div class="scan-data-row">Purchase price<strong>${money(p.cost)}</strong></div><div class="scan-data-row">Selling price<strong>${money(p.price)}</strong></div><div class="scan-data-row">Available quantity<strong>${bn(p.stock)} ${esc(p.unit || '')}</strong></div>${primaryAction}<div class="scan-result-actions"><button type="button" onclick="copyScanResult()">▣ &nbsp;Copy Text</button><button type="button" onclick="shareScanResult()">↗ &nbsp;Share</button></div></div><div class="scan-more-label">More Options</div><div class="scan-options"><button class="scan-option" type="button" onclick="openScannerProductDetails()">◉ &nbsp;Open Product Page<span>›</span></button><button class="scan-option" type="button" onclick="toggleInventoryForm()">＋ &nbsp;Add to Inventory<span>›</span></button><button class="scan-option" type="button" onclick="searchProductByBarcode()">⌕ &nbsp;Search product<span>›</span></button><button class="scan-option" type="button" onclick="scanAgain()">⟳ &nbsp;Scan Again<span>›</span></button></div><div id="scanInventoryHost"></div>`;
+    }
+    function addScannedProductToSale() {
+      const p = scannerResult?.product; if (!p) return;
+      if (p.stock <= 0) { showToast('This product is out of stock'); return }
+      const current = cart.find(i => i.id === p.id); if (current && current.qty >= p.stock) { showToast('No more stock available for this product'); return }
+      addToCart(p.id); scannerReturnPage = 'sales'; showToast(`${p.name} added to sale · ${money(p.price)}`);
+    }
+    function useExistingProductForPurchase() {
+      const target = document.getElementById(purchaseBarcodeTargetId), product = scannerResult?.product; if (!target || !product) { showToast('Purchase row is no longer available'); return }
+      const mode = target.querySelector('[name="productMode"]'), select = target.querySelector('[name="productId"]');
+      if (mode) { mode.value = 'existing'; togglePurchaseProductMode(target.id) }
+      if (select) { select.value = String(product.id); updateExistingPurchaseCost(target.id) }
+      closeScannerModule(); showPage('purchase'); showToast(`${product.name} selected for purchase`);
+    }
+    function toggleInventoryForm() { const host = document.getElementById('scanInventoryHost'); if (!host) return; if (host.innerHTML) { host.innerHTML = ''; return } host.innerHTML = `<div class="scan-result-card"><div class="scan-data-row">Additional quantity to add<strong>Current stock: ${bn(scannerResult.product.stock)} ${esc(scannerResult.product.unit || '')}</strong></div><div class="scan-register-form"><div class="scan-field full"><label>Quantity to add</label><input id="scanStockQuantity" type="number" min="0.01" step="any" value="1"></div></div><button class="scan-result-main" type="button" onclick="commitScannerStock()">Update Inventory</button></div>` }
+    function commitScannerStock() { const quantity = Number(document.getElementById('scanStockQuantity')?.value), p = scannerResult?.product; if (!p || quantity <= 0) { showToast('Enter a valid stock quantity'); return } p.stock += quantity; save(); renderStock(); renderSaleProducts(); updateStats(); scannerResult.product = p; renderScanResult(); showToast(`${p.name} stock updated`) }
+    function openScannerProductDetails() { const p = scannerResult?.product; if (!p) return; closeScannerModule(); showPage('stock'); const search = document.getElementById('stockSearch'); if (search) { search.value = p.name; renderStock() } }
+    function searchProductByBarcode() { const p = scannerResult?.product; if (!p) return; closeScannerModule(); showPage('stock'); const search = document.getElementById('stockSearch'); if (search) { search.value = p.name; renderStock() } }
+    function scanAgain() { const mode = barcodeScannerMode; document.getElementById('scannerModule').hidden = false; showScannerScreen('scanner'); startBarcodeScanner(); }
+    function useBarcodeForPurchase() { const target = document.getElementById(purchaseBarcodeTargetId); const input = target?.querySelector('[name="newBarcode"]'); if (input) input.value = scannerResult.value; closeScannerModule(); showPage('purchase'); showToast('Barcode added to purchase item') }
+    function showRegistrationForm(sessionId) {
+      const entry = scannerSession.find(item => String(item.id) === String(sessionId));
+      const host = document.getElementById(`scanRegistrationHost-${sessionId}`);
+      if (!entry || !host) return;
+      host.innerHTML = `<form class="scan-register-form" onsubmit="registerScannedProduct(event,${Number(sessionId)})"><div class="scan-field full"><label>Barcode</label><input name="barcode" value="${esc(entry.value)}" readonly></div><div class="scan-field full"><label>Product name</label><input name="name" required placeholder="Product name"></div><div class="scan-field"><label>Category</label><input name="category" required placeholder="e.g. Beverage"></div><div class="scan-field"><label>Unit</label><select name="unit"><option>pcs</option><option>pack</option><option>kg</option><option>L</option><option>bottle</option></select></div><div class="scan-field"><label>Purchase price (৳)</label><input name="cost" type="number" min="0" step="any" required></div><div class="scan-field"><label>Selling price (৳)</label><input name="price" type="number" min="0.01" step="any" required></div><div class="scan-field"><label>Available quantity</label><input name="stock" type="number" min="0" step="any" value="0" required></div><button class="scan-result-main full" type="submit">Save Product to Inventory</button></form>`;
+      host.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    function registerScannedProduct(event, sessionId) {
+      event.preventDefault(); const data = new FormData(event.currentTarget), barcode = String(data.get('barcode') || '').trim();
+      const existing = products.find(p => String(p.barcode || '').trim() === barcode);
+      if (existing) {
+        scannerResult = { kind: 'barcode', value: barcode, format: 'Barcode', product: existing, found: true };
+        if (barcodeScannerMode === 'sale' && existing.stock > 0) addToCart(existing.id);
+        const scannedEntry = scannerSession.find(item => String(item.id) === String(sessionId));
+        if (scannedEntry) Object.assign(scannedEntry, { kind: 'product', name: existing.name, price: existing.price, productId: existing.id });
+        renderScannerSession();
+        showToast((currentLanguage === 'en' ? 'This barcode already belongs to ' : 'এই বারকোডটি আগে থেকেই আছে: ') + existing.name);
+        return;
+      }
+      const record = { id: Date.now(), name: String(data.get('name') || '').trim(), barcode, category: String(data.get('category') || '').trim(), unit: String(data.get('unit') || 'pcs'), cost: Number(data.get('cost')), price: Number(data.get('price')), stock: Number(data.get('stock')), emoji: '📦', notes: String(data.get('notes') || '') };
+      if (!record.name || !record.category || record.cost < 0 || record.price <= 0 || record.stock < 0) { showToast('Check all product details'); return }
+      const created = createProductRecord(record); save(); renderStock(); renderSaleProducts(); updateStats(); scannerResult = { kind: 'barcode', value: barcode, format: 'Barcode', product: created, found: true };
+      if (barcodeScannerMode === 'sale' && created.stock > 0) addToCart(created.id);
+      const scannedEntry = scannerSession.find(item => String(item.id) === String(sessionId));
+      if (scannedEntry) Object.assign(scannedEntry, { kind: 'product', name: created.name, price: created.price, productId: created.id, registered: true });
+      renderScannerSession();
+      showToast(currentLanguage === 'en' ? 'Product registered. Continue scanning.' : 'পণ্য নিবন্ধিত হয়েছে। স্ক্যান চালিয়ে যান।');
+      if (barcodeScannerMode === 'product') { productDraftForBarcode = null; barcodeScannerMode = 'sale'; }
+      if (barcodeScannerMode === 'purchaseNewProduct') {
+        const target = document.getElementById(purchaseBarcodeTargetId), mode = target?.querySelector('[name="productMode"]'), select = target?.querySelector('[name="productId"]');
+        if (target && mode && select) { translatePurchaseFormDynamic(); mode.value = 'existing'; togglePurchaseProductMode(target.id); select.value = String(created.id); updateExistingPurchaseCost(target.id); }
+      }
+    }
+    function renderQrResult() {
+      const host = document.getElementById('qrResultContent'), result = scannerResult; if (!host || !result) return; const parsed = result.parsed || parseQrContent(result.value);
+      const qrPreview = result.preview ? `<img src="${esc(result.preview)}" alt="Captured QR scan preview" style="width:67px;height:67px;object-fit:cover;border-radius:8px;background:#fff">` : '<div class="scan-qr-art">▦</div>';
+      if (!parsed.valid) { host.innerHTML = `<div class="scan-not-found"><div class="scan-not-found-icon">!</div><h3>Unsupported QR Content</h3><p>This QR data could not be interpreted. You can still copy or share its raw text.</p><div class="scan-data-row">Raw content<strong>${esc(result.value)}</strong></div></div><div class="scan-result-actions"><button onclick="copyScanResult()">▣ Copy</button><button onclick="shareScanResult()">↗ Share</button></div>`; return }
+      if (parsed.wifi) { host.innerHTML = `<div class="scan-result-card"><div class="scan-wifi-card">${qrPreview}<div class="scan-wifi-info"><strong>◉ &nbsp;Wi-Fi Network</strong><small>Network Name</small><small style="color:#f4f8fc">${esc(parsed.ssid || 'Hidden network')}</small><small>Security</small><small style="color:#f4f8fc">${esc(parsed.security)}</small><small>Password</small><small class="scan-password"><span id="qrWifiPassword">${qrPasswordVisible ? esc(parsed.password || 'No password') : '••••••••'}</span><button type="button" onclick="toggleQrPassword()">${qrPasswordVisible ? 'Hide' : 'Show'}</button></small></div></div><button class="scan-result-main" onclick="copyQrWifi()">▣ &nbsp;Copy Wi-Fi Info</button><div class="scan-result-actions"><button onclick="copyScanResult()">▣ Copy Text</button><button onclick="shareScanResult()">↗ Share</button></div></div><div class="scan-not-found"><p>For your privacy, network credentials are hidden until you choose to reveal or copy them.</p></div>`; return }
+      const isLink = !!parsed.url; host.innerHTML = `<div class="scan-result-card"><div class="scan-wifi-card">${qrPreview}<div class="scan-wifi-info"><strong>${esc(parsed.type)}</strong><small>Scanned content</small><small style="color:#f4f8fc;overflow-wrap:anywhere">${esc(parsed.url || result.value)}</small>${isLink ? `<small>Host</small><small style="color:#f4f8fc">${esc(parsed.host)}</small>` : ''}</div></div>${isLink && parsed.safe ? '<button class="scan-result-main" onclick="openSafeQrLink()">↗ &nbsp;Open Website</button>' : ''}<div class="scan-result-actions"><button onclick="copyScanResult()">▣ Copy</button><button onclick="shareScanResult()">↗ Share</button></div></div><div class="scan-not-found"><p>${isLink ? 'Only HTTPS links are eligible for opening. Check the address before continuing.' : 'QR content is shown as scanned; no external product details are assumed.'}</p></div>`;
+    }
+    function toggleQrPassword() { qrPasswordVisible = !qrPasswordVisible; const value = scannerResult?.parsed?.password || ''; const el = document.getElementById('qrWifiPassword'); if (el) el.textContent = qrPasswordVisible ? (value || 'No password') : '••••••••'; renderQrResult() }
+    function copyQrWifi() { const p = scannerResult?.parsed; if (!p) return; copyText(`SSID: ${p.ssid}\nSecurity: ${p.security}\nPassword: ${p.password}`) }
+    function openSafeQrLink() { const url = scannerResult?.parsed?.url; if (!url) return; try { const parsed = new URL(url); if (parsed.protocol !== 'https:' || parsed.username || parsed.password || !parsed.hostname) { showToast('Only safe HTTPS links without embedded credentials can be opened'); return } if (window.confirm(`Open this website?\n${parsed.hostname}`)) window.open(parsed.href, '_blank', 'noopener,noreferrer') } catch (error) { showToast('This is not a valid website address') } }
+    function copyText(text) { if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard')).catch(() => fallbackCopy(text)); else fallbackCopy(text) }
+    function fallbackCopy(text) { const input = document.createElement('textarea'); input.value = text; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.select(); try { document.execCommand('copy'); showToast('Copied to clipboard') } catch (error) { showToast('Unable to copy text') } input.remove() }
+    function copyScanResult() { if (!scannerResult) return; copyText(scannerResult.value) }
+    async function shareScanResult() { if (!scannerResult) return; try { if (navigator.share) await navigator.share({ title: 'Scan result', text: scannerResult.value }); else copyScanResult() } catch (error) { if (error.name !== 'AbortError') copyScanResult() } }
+    function submitManualBarcode() { const value = document.getElementById('manualBarcode')?.value; if (!String(value || '').trim()) { setCameraMessage('Enter a barcode or QR value first.', true); return } const code = String(value).trim(); delete scannerLastSeen[code]; if (scannerLastActiveCode === code) scannerLastActiveCode = ''; handleScannerDetection(code, 'MANUAL') }
+    function renderSaleProducts() {
+      const q = (document.getElementById('saleSearch')?.value || '').trim().toLowerCase();
+      const soldQuantities = sales.reduce((totals, sale) => {
+        (sale.items || []).forEach(item => {
+          totals[item.id] = (totals[item.id] || 0) + (Number(item.qty) || 0);
+        });
+        return totals;
+      }, {});
+      const list = products
+        .filter(p => p.name.toLowerCase().includes(q))
+        .sort((a, b) => (soldQuantities[b.id] || 0) - (soldQuantities[a.id] || 0));
+      document.getElementById('saleProducts').innerHTML = list.length ? list.map(p => `<div class="product-row"><div class="item-icon">${p.emoji || '📦'}</div><div class="item-info"><strong>${esc(p.name)}</strong><small>${money(p.price)} / ${esc(p.unit)} · ${currentLanguage === 'en' ? 'Stock' : 'স্টক'} ${bn(p.stock)}</small></div><button class="secondary" onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''}>＋</button></div>`).join('') : `<div class="empty">${currentLanguage === 'en' ? 'No products found' : 'কোনো পণ্য পাওয়া যায়নি'}</div>`;
+    }
+    function addToCart(id) {
+      const p = products.find(x => x.id === id); if (!p || p.stock <= 0) { showToast(currentLanguage === 'en' ? 'This product is out of stock' : 'এই পণ্যের স্টক নেই'); return }
+      const item = cart.find(x => x.id === id); if (item) { if (item.qty >= p.stock) { showToast(currentLanguage === 'en' ? 'Not enough stock available' : 'পর্যাপ্ত স্টক নেই'); return } item.qty++ } else cart.push({ id, qty: 1 });
+      renderCart();
+    }
+    function changeQty(id, delta) {
+      const item = cart.find(x => x.id === id), p = products.find(x => x.id === id); if (!item) return;
+      if (delta > 0 && item.qty >= p.stock) { showToast(currentLanguage === 'en' ? 'Not enough stock available' : 'পর্যাপ্ত স্টক নেই'); return }
+      item.qty += delta; if (item.qty <= 0) cart = cart.filter(x => x.id !== id); renderCart();
+    }
+    function cartTotal() { return cart.reduce((sum, i) => { const p = products.find(x => x.id === i.id); return sum + (p ? p.price * i.qty : 0) }, 0) }
+    function renderCart() {
+      const box = document.getElementById('cartItems');
+      box.innerHTML = cart.length ? cart.map(i => { const p = products.find(x => x.id === i.id); return `<div class="sale-row"><div class="item-info"><strong>${esc(p.name)}</strong><small>${money(p.price)} × ${bn(i.qty)} ${esc(p.unit)}</small></div><div style="display:flex;align-items:center;gap:8px"><button class="secondary" style="padding:5px 10px" onclick="changeQty(${p.id},-1)">−</button><b>${bn(i.qty)}</b><button class="secondary" style="padding:5px 10px" onclick="changeQty(${p.id},1)">＋</button></div><div class="item-price">${money(p.price * i.qty)}</div></div>` }).join('') : `<div class="empty">${currentLanguage === 'en' ? 'Choose products for sale' : 'বিক্রির জন্য পণ্য বেছে নিন'}</div>`;
+      document.getElementById('cartCount').textContent = currentLanguage === 'en' ? `${bn(cart.reduce((s, i) => s + i.qty, 0))} items` : `${bn(cart.reduce((s, i) => s + i.qty, 0))}টি পণ্য`;
+      document.getElementById('cartTotal').textContent = money(cartTotal());
+    }
+    document.getElementById('paymentType').addEventListener('change', e => { document.getElementById('paidField').style.display = e.target.value === 'partial' ? 'block' : 'none' });
+    function completeSale() {
+      if (!cart.length) { showToast(currentLanguage === 'en' ? 'Choose products first' : 'আগে বিক্রির জন্য পণ্য বেছে নিন'); return }
+      checkDailyRollover();
+      const total = cartTotal(), type = document.getElementById('paymentType').value, name = document.getElementById('customerName').value.trim();
+      let paid = type === 'cash' ? total : type === 'due' ? 0 : Number(document.getElementById('paidAmount').value || 0);
+      if (paid < 0 || paid > total) { showToast(currentLanguage === 'en' ? 'Check the payment amount' : 'জমার টাকার পরিমাণ ঠিক করুন'); return }
+      if (type === 'partial' && paid === total) { paid = total }
+      const due = total - paid;
+      for (const i of cart) { const p = products.find(x => x.id === i.id); if (!p || p.stock < i.qty) { showToast(currentLanguage === 'en' ? 'Stock changed, please review again' : 'স্টক পরিবর্তন হয়েছে, আবার যাচাই করুন'); return } }
+      const profit = cart.reduce((s, i) => { const p = products.find(x => x.id === i.id); return s + (p.price - p.cost) * i.qty }, 0);
+      const saleId = Date.now(), soldAt = new Date();
+      cart.forEach(i => { products.find(p => p.id === i.id).stock -= i.qty });
+      totalSales += total; totalProfit += profit;
+      const customerName = name || (currentLanguage === 'en' ? 'General customer' : 'সাধারণ ক্রেতা');
+      const saleItems = cart.map(i => {
+        const product = products.find(p => p.id === i.id);
+        return { id: i.id, name: product?.name || '', price: product?.price || 0, qty: i.qty, unit: product?.unit || '' };
+      });
+      sales.unshift({ id: saleId, dateKey: dailyTotalsDate, createdAt: soldAt.toISOString(), name: customerName, total, profit, paid, due, items: saleItems, time: soldAt.toLocaleTimeString(currentLanguage === 'en' ? 'en-US' : 'bn-BD', { hour: '2-digit', minute: '2-digit' }) });
+      if (due > 0) {
+        const found = ledger.find(x => name && x.name.toLowerCase() === name.toLowerCase());
+        const dueEntry = { id: saleId, dateKey: dailyTotalsDate, createdAt: soldAt.toISOString(), name: customerName, total, due, items: saleItems.map(item => ({ ...item })) };
+        if (found) { found.due += due; found.dueHistory = Array.isArray(found.dueHistory) ? found.dueHistory : []; found.dueHistory.unshift(dueEntry) }
+        else ledger.unshift({ id: Date.now() + 1, name: customerName, phone: '', due, dueHistory: [dueEntry] });
+      }
+      save(); cart = []; document.getElementById('customerName').value = ''; document.getElementById('paymentType').value = 'cash'; document.getElementById('paidAmount').value = ''; document.getElementById('paidField').style.display = 'none';
+      renderCart(); renderSaleProducts(); updateStats(); showToast(currentLanguage === 'en' ? 'Sale completed · ' + money(total) : 'বিক্রি সম্পন্ন হয়েছে · ' + money(total)); showPage('home');
+    }
+    function clearCart() { cart = []; renderCart(); showToast(currentLanguage === 'en' ? 'Cart cleared' : 'কার্ট খালি করা হয়েছে') }
+    function renderStock() {
+      const q = (document.getElementById('stockSearch')?.value || '').toLowerCase();
+      const list = products.filter(p => p.name.toLowerCase().includes(q));
+      document.getElementById('stockList').innerHTML = list.length ? list.map(p => `<div class="product-row"><div class="item-icon">${p.emoji || '📦'}</div><div class="item-info"><strong>${esc(p.name)}</strong><small>${currentLanguage === 'en' ? 'Bought' : 'কেনা'} ${money(p.cost)} · ${currentLanguage === 'en' ? 'Sell' : 'বিক্রি'} ${money(p.price)} / ${esc(p.unit)}</small></div><div class="item-price">${bn(p.stock)} ${esc(p.unit)}<small>${p.stock <= 5 ? `<span class="badge red">${currentLanguage === 'en' ? 'Low stock' : 'কম স্টক'}</span>` : (currentLanguage === 'en' ? 'In stock' : 'স্টকে আছে')}</small></div></div>`).join('') : `<div class="empty">${currentLanguage === 'en' ? 'No products found' : 'কোনো পণ্য পাওয়া যায়নি'}</div>`;
+    }
+    function openDueModal() {
+      const title = currentLanguage === 'en' ? 'Add Due' : 'বাকি যোগ করুন';
+      openModal(title, `<form onsubmit="addDue(event)"><div class="field"><label>${currentLanguage === 'en' ? 'Customer name' : 'ক্রেতার নাম'}</label><input name="name" required placeholder="${currentLanguage === 'en' ? 'Customer name' : 'ক্রেতার নাম'}"></div><div class="field"><label>${currentLanguage === 'en' ? 'Mobile number' : 'মোবাইল নম্বর'}</label><input name="phone" inputmode="tel" placeholder="01XXXXXXXXX"></div><div class="field"><label>${currentLanguage === 'en' ? 'Due amount (৳)' : 'বাকি টাকা (৳)'}</label><input name="due" type="number" min="1" required placeholder="${currentLanguage === 'en' ? 'e.g. 500' : 'যেমন: ৫০০'}"></div><div class="field"><label>${currentLanguage === 'en' ? 'Additional notes' : 'অতিরিক্ত তথ্য'}</label><textarea name="notes" placeholder="${currentLanguage === 'en' ? 'e.g. delivery date, payment terms, note...' : 'যেমন: ডেলিভারি বা পেমেন্টের নোট...'}"></textarea></div><button class="primary" style="width:100%">${currentLanguage === 'en' ? 'Add due' : 'বাকিতে যোগ করুন'}</button></form>`);
+    }
+    function addDue(e) {
+      e.preventDefault();
+      const f = new FormData(e.target), id = Date.now(), name = f.get('name').trim(), amount = Number(f.get('due'));
+      const notes = String(f.get('notes') || '').trim(), createdAt = new Date().toISOString();
+      ledger.unshift({ id, name, phone: f.get('phone').trim(), due: amount, notes, dueHistory: [{ id, dateKey: getLocalDateKey(), createdAt, name, total: amount, due: amount, items: [], notes }] });
+      save(); closeModal(); renderLedger(); updateStats(); showToast(currentLanguage === 'en' ? 'Due added to ledger' : 'বাকি খাতায় যোগ হয়েছে');
+    }
+    function ledgerEntryDateTime(entry) {
+      const date = entry.createdAt ? new Date(entry.createdAt) : new Date(`${entry.dateKey || getLocalDateKey()}T00:00:00`);
+      const formattedDate = date.toLocaleDateString(currentLanguage === 'en' ? 'en-US' : 'bn-BD', { dateStyle: 'medium' });
+      const formattedTime = entry.createdAt ? date.toLocaleTimeString(currentLanguage === 'en' ? 'en-US' : 'bn-BD', { hour: '2-digit', minute: '2-digit' }) : entry.time;
+      return formattedTime ? `${formattedDate} · ${esc(formattedTime)}` : formattedDate;
+    }
+    function renderLedgerDetails(customer) {
+      const history = Array.isArray(customer.dueHistory) ? [...customer.dueHistory] : [];
+      history.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+      const emptyText = currentLanguage === 'en' ? 'No itemized credit-sale details are available for this customer.' : 'এই ক্রেতার পণ্যভিত্তিক বাকির তথ্য নেই।';
+      const transactions = history.length ? history.map(entry => {
+        const items = Array.isArray(entry.items) ? entry.items : [];
+        const productsMarkup = items.length ? items.map(item => `<div class="ledger-product-line"><span>${esc(item.name || (currentLanguage === 'en' ? 'Product' : 'পণ্য'))}<small>${money(item.price)} × ${bn(item.qty)} ${esc(item.unit || '')}</small></span><strong>${money((Number(item.price) || 0) * (Number(item.qty) || 0))}</strong></div>`).join('') : `<div class="ledger-product-line"><span>${esc(entry.notes || (currentLanguage === 'en' ? 'Manual due entry (no product list)' : 'সরাসরি যোগ করা বাকি (পণ্যের তালিকা নেই)'))}</span><strong>${money(entry.total || entry.due)}</strong></div>`;
+        return `<div class="ledger-transaction"><div class="ledger-transaction-head"><div><strong>${esc(entry.name || customer.name)}</strong><small>${esc(ledgerEntryDateTime(entry))}</small></div><strong>${money(entry.total || 0)}</strong></div>${productsMarkup}<div class="ledger-details-total"><span>${currentLanguage === 'en' ? 'Due from this sale' : 'এই বিক্রির বাকি'}</span><strong>${money(entry.due || 0)}</strong></div></div>`;
+      }).join('') : `<div class="empty">${emptyText}</div>`;
+      return transactions;
+    }
+    function showLedgerCustomerDetails(id) {
+      const customer = ledger.find(entry => String(entry.id) === String(id));
+      if (!customer) return;
+      activeLedgerCustomerId = customer.id;
+      const title = document.getElementById('ledgerCustomerTitle');
+      const host = document.getElementById('ledgerCustomerDetails');
+      if (!title || !host) return;
+      title.textContent = customer.name;
+      host.innerHTML = `<div class="ledger-details"><div class="sale-row"><div class="item-icon">👤</div><div class="item-info"><strong>${esc(customer.name)}</strong><small>${esc(customer.phone || (currentLanguage === 'en' ? 'No mobile number' : 'মোবাইল নম্বর নেই'))}${customer.address ? ` · ${esc(customer.address)}` : ''}</small></div></div><div class="ledger-details-total"><strong>${currentLanguage === 'en' ? 'Total outstanding due' : 'সর্বমোট বাকি'}</strong><strong>${money(customer.due)}</strong></div><button class="secondary" type="button" style="width:100%;margin-top:12px" onclick="editLedgerCustomerProfile(${customer.id})">${currentLanguage === 'en' ? '✎ Update Customer Profile' : '✎ ক্রেতার তথ্য আপডেট'}</button><div class="section-head" style="margin:16px 2px 10px"><h2 style="font-size:14px">${currentLanguage === 'en' ? 'Credit sale history' : 'বাকির বিক্রির তালিকা'}</h2></div>${renderLedgerDetails(customer)}<button class="primary" type="button" style="width:100%;margin-top:12px" onclick="collectDue(${customer.id})">${currentLanguage === 'en' ? 'Collect Due' : 'বাকি আদায়'}</button></div>`;
+      showPage('ledger-detail');
+    }
+    function editLedgerCustomerProfile(id) {
+      const customer = ledger.find(entry => String(entry.id) === String(id));
+      if (!customer) return;
+      activeLedgerCustomerId = customer.id;
+      document.getElementById('ledgerProfileName').value = customer.name || '';
+      document.getElementById('ledgerProfilePhone').value = customer.phone || '';
+      document.getElementById('ledgerProfileAddress').value = customer.address || '';
+      document.getElementById('ledgerProfileNotes').value = customer.notes || '';
+      showPage('ledger-profile');
+    }
+    function returnToLedgerCustomer() {
+      if (activeLedgerCustomerId !== null) showLedgerCustomerDetails(activeLedgerCustomerId);
+      else showPage('ledger');
+    }
+    function saveLedgerCustomerProfile(event) {
+      event.preventDefault();
+      const customer = ledger.find(entry => String(entry.id) === String(activeLedgerCustomerId));
+      if (!customer) { showToast(currentLanguage === 'en' ? 'Customer profile was not found' : 'ক্রেতার তথ্য পাওয়া যায়নি'); showPage('ledger'); return; }
+      const data = new FormData(event.currentTarget), name = String(data.get('name') || '').trim();
+      if (!name) { showToast(currentLanguage === 'en' ? 'Enter the customer name' : 'ক্রেতার নাম লিখুন'); return; }
+      customer.name = name;
+      customer.phone = String(data.get('phone') || '').trim();
+      customer.address = String(data.get('address') || '').trim();
+      customer.notes = String(data.get('notes') || '').trim();
+      save();
+      renderLedger();
+      updateStats();
+      showLedgerCustomerDetails(customer.id);
+      showToast(currentLanguage === 'en' ? 'Customer profile updated' : 'ক্রেতার তথ্য আপডেট হয়েছে');
+    }
+    function renderLedger() {
+      const q = (document.getElementById('ledgerSearch')?.value || '').toLowerCase();
+      const list = ledger.filter(l => l.name.toLowerCase().includes(q) || l.phone.includes(q));
+      document.getElementById('ledgerList').innerHTML = list.length ? list.map(l => `<div class="sale-row ledger-customer-row" role="button" tabindex="0" onclick="showLedgerCustomerDetails(${l.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showLedgerCustomerDetails(${l.id})}"><div class="item-icon">👤</div><div class="item-info"><strong>${esc(l.name)}</strong><small>${esc(l.phone || (currentLanguage === 'en' ? 'No mobile number' : 'মোবাইল নম্বর নেই'))} · ${currentLanguage === 'en' ? 'Tap to view credit purchases' : 'বাকির পণ্য দেখতে চাপ দিন'}</small></div><div class="item-price">${money(l.due)}<small>${currentLanguage === 'en' ? 'View details →' : 'বিস্তারিত দেখুন →'}</small></div></div>`).join('') : `<div class="empty">${currentLanguage === 'en' ? 'No customer found' : 'কোনো ক্রেতা পাওয়া যায়নি'}</div>`;
+      document.getElementById('ledgerTotal').textContent = money(ledger.reduce((s, l) => s + l.due, 0));
+    }
+    function collectDue(id) {
+      const l = ledger.find(x => x.id === id); if (!l) return;
+      openModal(currentLanguage === 'en' ? 'Collect Due' : 'বাকি আদায়', `<p style="margin-top:0;color:#68786d;font-size:13px">${esc(l.name)} ${currentLanguage === 'en' ? 'owes' : '-এর বাকি'} ${money(l.due)}</p><form onsubmit="submitCollection(event,${id})"><div class="field"><label>${currentLanguage === 'en' ? 'Amount collected (৳)' : 'জমা টাকার পরিমাণ (৳)'}</label><input name="amount" type="number" min="1" max="${l.due}" required></div><button class="primary" style="width:100%">${currentLanguage === 'en' ? 'Confirm collection' : 'জমা নিশ্চিত করুন'}</button></form>`);
+    }
+    function submitCollection(e, id) { e.preventDefault(); const l = ledger.find(x => x.id === id), amount = Number(new FormData(e.target).get('amount')); if (!l || amount <= 0 || amount > l.due) { showToast(currentLanguage === 'en' ? 'Invalid amount' : 'টাকার পরিমাণ ঠিক নয়'); return } ledgerCollections.unshift({ id: Date.now(), customerId: l.id, name: l.name, amount, dateKey: getLocalDateKey(), createdAt: new Date().toISOString() }); l.due -= amount; if (l.due === 0) ledger = ledger.filter(x => x.id !== id); save(); closeModal(); renderLedger(); updateStats(); if (document.getElementById('ledger-detailPage').classList.contains('active')) { if (l.due > 0) showLedgerCustomerDetails(id); else showPage('ledger') } showToast(currentLanguage === 'en' ? money(amount) + ' collected' : money(amount) + ' জমা নেওয়া হয়েছে') }
+    function openPurchaseModal() { showPage('purchase') }
+    function renderPurchasePage() {
+      const form = document.getElementById('purchaseForm');
+      if (!form) return;
+      const dateField = form.elements.date;
+      if (dateField && !dateField.value) { const today = new Date(); dateField.value = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10) }
+      if (!document.querySelector('#purchaseItems .purchase-item')) addPurchaseItem();
+      translatePurchaseFormDynamic();
+      renderPurchaseHistory();
+    }
+    function translatePurchaseFormDynamic() {
+      const form = document.getElementById('purchaseForm'); if (!form) return;
+      const isEn = currentLanguage === 'en';
+      form.elements.supplier.placeholder = isEn ? 'e.g. Rahman Traders' : 'যেমন: রহমান ট্রেডার্স';
+      form.elements.phone.placeholder = '01XXXXXXXXX';
+      form.elements.invoice.placeholder = isEn ? 'Optional' : 'ঐচ্ছিক';
+      form.elements.notes.placeholder = isEn ? 'e.g. Delivery or payment notes' : 'যেমন: ডেলিভারি বা পেমেন্টের নোট';
+      document.querySelectorAll('#purchaseItems .purchase-item').forEach((row, index) => {
+        const labels = row.querySelectorAll('.field label');
+        const labelTexts = isEn ? ['Product type', 'Select product', 'New product name', 'Barcode', 'Selling price (৳)', 'Unit', 'Quantity', 'Unit cost (৳)'] : ['পণ্যের ধরন', 'পণ্য নির্বাচন', 'নতুন পণ্যের নাম', 'বারকোড', 'বিক্রি মূল্য (৳)', 'একক', 'পরিমাণ', 'প্রতি এককের ক্রয় মূল্য (৳)'];
+        labels.forEach((label, labelIndex) => { if (labelTexts[labelIndex]) label.textContent = labelTexts[labelIndex] });
+        const title = row.querySelector('.purchase-item-head strong');
+        if (title) title.textContent = `${currentLanguage === 'en' ? 'Item' : 'পণ্য'} ${bn(index + 1)}`;
+        const remove = row.querySelector('.purchase-remove');
+        if (remove) remove.textContent = isEn ? 'Remove' : 'বাদ দিন';
+        const mode = row.querySelector('[name="productMode"]');
+        if (mode) { const value = mode.value; mode.innerHTML = `<option value="existing">${isEn ? 'Existing product' : 'আগের পণ্য'}</option><option value="new">${isEn ? 'New product' : 'নতুন পণ্য'}</option>`; mode.value = value }
+        const select = row.querySelector('[name="productId"]');
+        if (select) { const selected = select.value; select.innerHTML = products.map(p => `<option value="${p.id}">${esc(p.name)} · ${isEn ? 'Stock' : 'স্টক'} ${bn(p.stock)}</option>`).join(''); select.value = selected }
+        const barcode = row.querySelector('[name="newBarcode"]'); if (barcode) barcode.placeholder = isEn ? 'Optional barcode' : 'ঐচ্ছিক বারকোড';
+        const name = row.querySelector('[name="newName"]'); if (name) name.placeholder = isEn ? 'e.g. Milk' : 'যেমন: দুধ';
+        const scan = row.querySelector('.purchase-new-fields button'); if (scan) scan.innerHTML = `▦ ${isEn ? 'Scan' : 'স্ক্যান'}`;
+        const unit = row.querySelector('[name="newUnit"]'); if (unit) {
+          const current = unit.value, units = isEn ? ['kg', 'g', 'L', 'pcs', 'pack', 'bottle'] : ['কেজি', 'গ্রাম', 'লিটার', 'পিস', 'প্যাকেট', 'বোতল'];
+          unit.innerHTML = units.map(value => `<option>${value}</option>`).join(''); if (units.includes(current)) unit.value = current
+        }
+      });
+    }
+    function addPurchaseItem() {
+      const container = document.getElementById('purchaseItems');
+      if (!container) return;
+      const index = container.querySelectorAll('.purchase-item').length;
+      const productOptions = products.map(p => `<option value="${p.id}">${esc(p.name)} · ${currentLanguage === 'en' ? 'Stock' : 'স্টক'} ${bn(p.stock)}</option>`).join('');
+      const units = currentLanguage === 'en' ? ['kg', 'g', 'L', 'pcs', 'pack', 'bottle'] : ['কেজি', 'গ্রাম', 'লিটার', 'পিস', 'প্যাকেট', 'বোতল'];
+      const rowId = `purchase-item-${Date.now()}-${index}`;
+      const item = document.createElement('div');
+      item.className = 'purchase-item';
+      item.id = rowId;
+      item.innerHTML = `<div class="purchase-item-head"><strong>${currentLanguage === 'en' ? 'Item' : 'পণ্য'} ${bn(index + 1)}}</strong>${index ? `<button type="button" class="purchase-remove" onclick="removePurchaseItem(this)">${currentLanguage === 'en' ? 'Remove' : 'বাদ দিন'}</button>` : ''}</div><div class="field"><label>${currentLanguage === 'en' ? 'Product type' : 'পণ্যের ধরন'}</label><select name="productMode" onchange="togglePurchaseProductMode('${rowId}')"><option value="existing">${currentLanguage === 'en' ? 'Existing product' : 'আগের পণ্য'}</option><option value="new">${currentLanguage === 'en' ? 'New product' : 'নতুন পণ্য'}</option></select></div><div class="purchase-existing-fields"><div class="field"><label>${currentLanguage === 'en' ? 'Select product' : 'পণ্য নির্বাচন'}</label><select name="productId" required onchange="updateExistingPurchaseCost('${rowId}')">${productOptions}</select></div></div><div class="purchase-new-fields" hidden><div class="purchase-product-fields"><div class="field full"><label>${currentLanguage === 'en' ? 'New product name' : 'নতুন পণ্যের নাম'}</label><input name="newName" placeholder="${currentLanguage === 'en' ? 'e.g. Milk' : 'যেমন: দুধ'}" disabled></div><div class="field full"><label>${currentLanguage === 'en' ? 'Barcode' : 'বারকোড'}</label><div class="barcode-entry"><input name="newBarcode" inputmode="numeric" placeholder="${currentLanguage === 'en' ? 'Optional barcode' : 'ঐচ্ছিক বারকোড'}" disabled><button type="button" class="secondary" onclick="openBarcodeScanner('purchaseNewProduct','${rowId}')">▦ ${currentLanguage === 'en' ? 'Scan' : 'স্ক্যান'}</button></div></div><div class="field"><label>${currentLanguage === 'en' ? 'Selling price (৳)' : 'বিক্রি মূল্য (৳)'}</label><input name="sellingPrice" type="number" min="0.01" step="any" disabled></div><div class="field"><label>${currentLanguage === 'en' ? 'Unit' : 'একক'}</label><select name="newUnit" disabled>${units.map(unit => `<option>${unit}</option>`).join('')}</select></div></div></div><div class="purchase-item-fields"><div class="field"><label>${currentLanguage === 'en' ? 'Quantity' : 'পরিমাণ'}</label><input name="quantity" type="number" min="0.01" step="any" value="1" required oninput="updatePurchaseTotal()"></div><div class="field"><label>${currentLanguage === 'en' ? 'Unit cost (৳)' : 'প্রতি এককের ক্রয় মূল্য (৳)'}</label><input name="unitCost" type="number" min="0" step="any" value="${products[0]?.cost || 0}" required oninput="updatePurchaseTotal()"></div></div>`;
+      container.appendChild(item);
+      const select = item.querySelector('[name="productId"]');
+      select?.addEventListener('change', () => updateExistingPurchaseCost(rowId));
+      updatePurchaseTotal();
+      translatePurchaseFormDynamic();
+    }
+    function togglePurchaseProductMode(rowId) {
+      const row = document.getElementById(rowId); if (!row) return;
+      const isNew = row.querySelector('[name="productMode"]').value === 'new';
+      row.querySelector('.purchase-existing-fields').hidden = isNew;
+      row.querySelector('.purchase-new-fields').hidden = !isNew;
+      row.querySelectorAll('.purchase-existing-fields input,.purchase-existing-fields select').forEach(field => { field.disabled = isNew; field.required = !isNew && field.name === 'productId' });
+      row.querySelectorAll('.purchase-new-fields input,.purchase-new-fields select').forEach(field => { field.disabled = !isNew; field.required = isNew && ['newName', 'sellingPrice'].includes(field.name) });
+      if (isNew) row.querySelector('[name="unitCost"]').value = '';
+      else updateExistingPurchaseCost(rowId);
+      updatePurchaseTotal();
+    }
+    function updateExistingPurchaseCost(rowId) {
+      const row = document.getElementById(rowId); if (!row || row.querySelector('[name="productMode"]').value !== 'existing') return;
+      const product = products.find(p => p.id === Number(row.querySelector('[name="productId"]').value));
+      row.querySelector('[name="unitCost"]').value = product?.cost || 0;
+      updatePurchaseTotal();
+    }
+    function removePurchaseItem(button) { button.closest('.purchase-item')?.remove(); addPurchaseItemLabels(); updatePurchaseTotal() }
+    function addPurchaseItemLabels() { document.querySelectorAll('#purchaseItems .purchase-item-head strong').forEach((el, index) => { el.textContent = `${currentLanguage === 'en' ? 'Item' : 'পণ্য'} ${bn(index + 1)}` }) }
+    function calculatePurchaseTotal() { return Array.from(document.querySelectorAll('#purchaseItems .purchase-item')).reduce((sum, item) => sum + (Number(item.querySelector('[name="quantity"]').value) || 0) * (Number(item.querySelector('[name="unitCost"]').value) || 0), 0) }
+    function updatePurchaseTotal() { const total = document.getElementById('purchaseTotal'); if (total) total.textContent = money(calculatePurchaseTotal()) }
+    function updatePurchasePaymentUI() { const status = document.querySelector('#purchaseForm [name="paymentStatus"]:checked')?.value; const paidField = document.getElementById('purchasePaidField'); if (paidField) paidField.style.display = status === 'partial' ? 'block' : 'none'; const paidInput = document.querySelector('#purchaseForm [name="paid"]'); if (paidInput) paidInput.required = status === 'partial' }
+    function addPurchase(e) {
+      e.preventDefault();
+      const form = e.target, formData = new FormData(form), rows = Array.from(document.querySelectorAll('#purchaseItems .purchase-item'));
+      const items = rows.map(row => {
+        const isNew = row.querySelector('[name="productMode"]').value === 'new';
+        return { row, isNew, product: isNew ? null : products.find(p => p.id === Number(row.querySelector('[name="productId"]').value)), name: isNew ? String(row.querySelector('[name="newName"]').value || '').trim() : '', barcode: isNew ? String(row.querySelector('[name="newBarcode"]').value || '').trim() : '', sellingPrice: isNew ? Number(row.querySelector('[name="sellingPrice"]').value) : 0, unit: isNew ? String(row.querySelector('[name="newUnit"]').value || '') : '', quantity: Number(row.querySelector('[name="quantity"]').value), unitCost: Number(row.querySelector('[name="unitCost"]').value) };
+      });
+      if (!items.length || items.some(i => i.quantity <= 0 || i.unitCost < 0 || (i.isNew ? (!i.name || i.sellingPrice <= 0 || !i.unit) : !i.product))) { showToast(currentLanguage === 'en' ? 'Check product details, quantities and costs' : 'পণ্যের তথ্য, পরিমাণ ও ক্রয় মূল্য যাচাই করুন'); return }
+      const barcodes = items.filter(i => i.isNew && i.barcode).map(i => i.barcode);
+      if (new Set(barcodes).size !== barcodes.length || barcodes.some(code => products.some(p => String(p.barcode || '').trim() === code))) { showToast(currentLanguage === 'en' ? 'This barcode is already in use' : 'এই বারকোডটি ইতিমধ্যে ব্যবহৃত হয়েছে'); return }
+      const total = items.reduce((sum, i) => sum + i.quantity * i.unitCost, 0), status = String(formData.get('paymentStatus') || 'paid');
+      let paid = status === 'paid' ? total : status === 'due' ? 0 : Number(formData.get('paid') || 0);
+      if (paid < 0 || paid > total || (status === 'partial' && paid === 0)) { showToast(currentLanguage === 'en' ? 'Enter a valid amount paid' : 'পরিশোধের সঠিক পরিমাণ লিখুন'); return }
+      items.forEach(i => {
+        if (i.isNew) { i.product = { id: Date.now() + Math.floor(Math.random() * 100000), name: i.name, barcode: i.barcode, price: i.sellingPrice, cost: i.unitCost, stock: 0, unit: i.unit, emoji: '📦' }; products.unshift(i.product) }
+        i.product.stock += i.quantity; i.product.cost = i.unitCost;
+      });
+      purchases.unshift({ id: Date.now(), supplier: String(formData.get('supplier') || '').trim(), phone: String(formData.get('phone') || '').trim(), invoice: String(formData.get('invoice') || '').trim(), date: String(formData.get('date') || ''), items: items.map(i => ({ productId: i.product.id, name: i.product.name, barcode: i.product.barcode || '', quantity: i.quantity, unit: i.product.unit, unitCost: i.unitCost })), total, paid, due: total - paid, notes: String(formData.get('notes') || '').trim(), createdAt: new Date().toISOString() });
+      save(); form.reset(); updatePurchasePaymentUI(); document.getElementById('purchaseItems').innerHTML = ''; renderPurchasePage(); renderStock(); renderSaleProducts(); updateStats(); showToast(currentLanguage === 'en' ? 'Purchase saved and stock updated' : 'ক্রয় সংরক্ষণ ও স্টক আপডেট হয়েছে');
+    }
+    function renderPurchaseHistory() {
+      const box = document.getElementById('purchaseHistoryList'); if (!box) return;
+      box.innerHTML = purchases.length ? purchases.slice(0, 8).map(p => {
+        const itemSummary = (p.items || []).map(i => `${esc(i.name)} × ${bn(i.quantity)}`).join(', '); const supplier = esc(p.supplier || (currentLanguage === 'en' ? 'Supplier not named' : 'সরবরাহকারীর নাম নেই'));
+        const payment = p.due > 0 ? (currentLanguage === 'en' ? `Due ${money(p.due)}` : `বাকি ${money(p.due)}`) : (currentLanguage === 'en' ? 'Paid' : 'পরিশোধিত');
+        return `<div class="sale-row"><div class="item-icon">🚚</div><div class="purchase-history-meta"><strong>${supplier}</strong><small>${esc(p.date || '')} · ${itemSummary}</small></div><div class="item-price">${money(p.total)}<small>${payment}</small></div></div>`
+      }).join('') : `<div class="empty">${currentLanguage === 'en' ? 'Purchase records will appear here' : 'ক্রয়ের তথ্য এখানে দেখা যাবে'}</div>`;
+    }
+    function openShopSettings() {
+      const form = document.getElementById('settingsForm');
+      if (!form) return;
+      form.elements.shop.value = document.getElementById('shopName').textContent;
+      form.elements.language.value = currentLanguage;
+      ['storeOpen', 'lowStockAlert', 'dailySummary', 'showWeather', 'quickSalesShortcut'].forEach(key => {
+        form.elements[key].checked = !!settings[key];
+      });
+      const preview = document.getElementById('settingsShopPreview');
+      if (preview) preview.textContent = document.getElementById('shopName').textContent;
+      showPage('settings');
+    }
+    function profileRoleLabel(role = userProfile.role) {
+      const roleKeys = { owner: 'profileRoleOwner', manager: 'profileRoleManager', staff: 'profileRoleStaff' };
+      const dict = translations[currentLanguage] || translations.bn;
+      return dict[roleKeys[role]] || dict.profileRoleOwner;
+    }
+    function updateUserProfileDisplay() {
+      const name = String(userProfile.name || '').trim();
+      const fallbackName = currentLanguage === 'en' ? 'Shop owner' : 'দোকান মালিক';
+      const displayName = name || fallbackName;
+      const avatar = document.getElementById('profileAvatar');
+      if (avatar) avatar.textContent = name ? Array.from(name)[0].toUpperCase() : (currentLanguage === 'en' ? 'U' : 'মু');
+      const displayNameEl = document.getElementById('profileDisplayName');
+      if (displayNameEl) displayNameEl.textContent = displayName;
+      const roleEl = document.getElementById('profileDisplayRole');
+      if (roleEl) roleEl.textContent = profileRoleLabel();
+      const shopEl = document.getElementById('profileShopSummary');
+      if (shopEl) shopEl.textContent = document.getElementById('shopName').textContent;
+      const statusEl = document.getElementById('profileStatusSummary');
+      if (statusEl) statusEl.textContent = currentLanguage === 'en' ? (settings.storeOpen ? 'Open' : 'Closed') : (settings.storeOpen ? 'চালু' : 'বন্ধ');
+    }
+    function openUserProfile() {
+      const form = document.getElementById('userProfileForm');
+      if (!form) return;
+      form.elements.name.value = userProfile.name || '';
+      form.elements.role.value = userProfile.role || 'owner';
+      form.elements.phone.value = userProfile.phone || '';
+      form.elements.email.value = userProfile.email || '';
+      form.elements.address.value = userProfile.address || '';
+      updateUserProfileDisplay();
+      showPage('user-profile');
+    }
+    function saveUserProfile(event) {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const name = String(data.get('name') || '').trim();
+      const email = String(data.get('email') || '').trim();
+      if (!name) {
+        showToast(currentLanguage === 'en' ? 'Enter your full name' : 'আপনার পূর্ণ নাম লিখুন');
+        return;
+      }
+      if (email && !event.currentTarget.elements.email.validity.valid) {
+        showToast(currentLanguage === 'en' ? 'Enter a valid email address' : 'সঠিক ইমেইল ঠিকানা লিখুন');
+        return;
+      }
+      userProfile = {
+        name,
+        role: String(data.get('role') || 'owner'),
+        phone: String(data.get('phone') || '').trim(),
+        email,
+        address: String(data.get('address') || '').trim()
+      };
+      save();
+      updateUserProfileDisplay();
+      showToast(currentLanguage === 'en' ? 'Profile saved' : 'প্রোফাইল সংরক্ষণ হয়েছে');
+    }
+    function applyLanguage(lang) {
+      currentLanguage = lang;
+      settings.language = lang;
+      document.documentElement.lang = lang;
+      const titleEl = document.querySelector('title');
+      if (titleEl) titleEl.textContent = lang === 'en' ? 'MudiMobile — Shop Manager' : 'MudiMobile — দোকান ম্যানেজার';
+      const shopLogo = document.querySelector('.shop-logo');
+      if (shopLogo) shopLogo.textContent = lang === 'en' ? 'M' : 'মু';
+      const dict = translations[lang] || translations.bn;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (dict[key]) el.placeholder = dict[key];
+      });
+      document.querySelector('.status span[data-i18n]')?.setAttribute('data-i18n', 'storeOpenText');
+      renderDateTime();
+      updateStatusUI();
+      updateWeatherUI();
+      updateQuickSaleUI();
+      renderSaleProducts();
+      renderStock();
+      renderLedger();
+      translatePurchaseFormDynamic();
+      renderPurchaseHistory();
+      renderDailySummaryHistory();
+      updateUserProfileDisplay();
+      updateStats();
+    }
+    function saveShopName(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const shopName = String(data.get('shop') || '').trim();
+      if (shopName) document.getElementById('shopName').textContent = shopName;
+      settings.storeOpen = !!data.get('storeOpen');
+      settings.lowStockAlert = !!data.get('lowStockAlert');
+      settings.dailySummary = !!data.get('dailySummary');
+      settings.showWeather = !!data.get('showWeather');
+      settings.quickSalesShortcut = !!data.get('quickSalesShortcut');
+      const selectedLang = String(data.get('language') || 'bn');
+      if (selectedLang === 'en' || selectedLang === 'bn') {
+        settings.language = selectedLang;
+        currentLanguage = selectedLang;
+        applyLanguage(selectedLang);
+      }
+      save();
+      updateStatusUI();
+      updateWeatherUI();
+      updateQuickSaleUI();
+      updateUserProfileDisplay();
+      const preview = document.getElementById('settingsShopPreview');
+      if (preview) preview.textContent = shopName;
+      showToast(currentLanguage === 'en' ? 'Settings updated' : 'সেটিংস আপডেট হয়েছে');
+    }
+    function updateStatusUI() {
+      const status = document.querySelector('.status');
+      if (!status) return;
+      const text = document.querySelector('.status [data-i18n]') || document.querySelector('.status span:last-child');
+      if (settings.storeOpen) {
+        status.innerHTML = '<i class="dot"></i> <span data-i18n="storeOpenText">' + (currentLanguage === 'en' ? 'Store Open' : 'দোকান চালু') + '</span>';
+      } else {
+        status.innerHTML = '<i class="dot closed"></i> <span data-i18n="storeClosedText">' + (currentLanguage === 'en' ? 'Store Closed' : 'দোকান বন্ধ') + '</span>';
+      }
+      const active = status.querySelector('[data-i18n]');
+      if (active) {
+        if (currentLanguage === 'en') active.textContent = settings.storeOpen ? 'Store Open' : 'Store Closed';
+        else active.textContent = settings.storeOpen ? 'দোকান চালু' : 'দোকান বন্ধ';
+      }
+    }
+    function updateWeatherUI() {
+      const badge = document.getElementById('weatherBadge');
+      if (!badge) return;
+      badge.style.display = settings.showWeather ? 'inline-flex' : 'none';
+    }
+    function updateQuickSaleUI() {
+      const actionBtn = document.querySelector('.ghost-btn');
+      if (actionBtn) actionBtn.style.display = settings.quickSalesShortcut ? 'inline-flex' : 'none';
+    }
+    function updateStats() {
+      const due = ledger.reduce((s, l) => s + l.due, 0), count = products.length;
+      renderTodayLedgerCard();
+      ['heroSales', 'salesMetric', 'reportSales'].forEach(id => document.getElementById(id).textContent = money(totalSales));
+      ['profitMetric', 'reportProfit'].forEach(id => document.getElementById(id).textContent = money(totalProfit));
+      ['dueMetric', 'reportDue', 'ledgerTotal'].forEach(id => document.getElementById(id).textContent = money(due));
+      ['productMetric', 'reportProducts'].forEach(id => document.getElementById(id).textContent = currentLanguage === 'en' ? `${bn(count)} items` : `${bn(count)}টি`);
+      document.getElementById('lowStockCount').textContent = currentLanguage === 'en' ? `${bn(products.filter(p => p.stock <= 5).length)} items` : `${bn(products.filter(p => p.stock <= 5).length)}টি`;
+      const todayTransactions = sales.filter(sale => sale.dateKey === dailyTotalsDate).length;
+      document.getElementById('transactionCount').textContent = currentLanguage === 'en' ? `${bn(todayTransactions)} items` : `${bn(todayTransactions)}টি`;
+      document.getElementById('recentSales').innerHTML = sales.length ? sales.slice(0, 5).map(s => `<div class="sale-row"><div class="item-icon">🧺</div><div class="item-info"><strong>${esc(s.name)}</strong><small>${esc(s.time)} · ${s.due ? (currentLanguage === 'en' ? 'Due' : 'বাকি') : (currentLanguage === 'en' ? 'Cash' : 'নগদ')}</small></div><div class="item-price">${money(s.total)}<small>${s.due ? `<span class="badge">${currentLanguage === 'en' ? 'Due' : 'বাকি'} ${money(s.due)}</span>` : (currentLanguage === 'en' ? 'Completed' : 'সম্পন্ন')}</small></div></div>`).join('') : `<div class="empty">${currentLanguage === 'en' ? 'New sales will appear here' : 'নতুন বিক্রি এখানে দেখা যাবে'}</div>`;
+    }
+    function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])) }
+    renderDateTime();
+    applyLanguage(currentLanguage);
+    updateStatusUI();
+    updateWeatherUI();
+    updateQuickSaleUI();
+    renderSaleProducts(); renderStock(); renderLedger(); updateStats();
+  </script>
+</body>
+
+</html>
