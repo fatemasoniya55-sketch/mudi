@@ -855,7 +855,7 @@
 
     .scan-camera-preview {
       position: absolute;
-      inset: calc(62px + env(safe-area-inset-top)) 0 180px;
+      inset: calc(58px + env(safe-area-inset-top)) 0 0;
       background: #060a10;
       overflow: hidden
     }
@@ -970,91 +970,6 @@
 
     .scan-camera-message.error {
       color: #ffb4b4
-    }
-
-    .scan-camera-panel {
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      max-height: 48vh;
-      overflow-y: auto;
-      padding: 12px 16px max(14px, env(safe-area-inset-bottom));
-      border-radius: 18px 18px 0 0;
-      background: #0e1724;
-      border-top: 1px solid #253248
-    }
-
-    .scan-mode-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px
-    }
-
-    .scan-mode-tab {
-      min-height: 40px;
-      border: 1px solid #202d40;
-      border-radius: 10px;
-      background: #111b2a;
-      color: #9baabe;
-      font-size: 10px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px
-    }
-
-    .scan-mode-tab.active {
-      background: var(--scan-teal);
-      color: #06171c;
-      border-color: var(--scan-teal)
-    }
-
-    .scan-mode-tab svg {
-      width: 15px;
-      height: 15px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.8
-    }
-
-    .scan-camera-help {
-      text-align: center;
-      margin: 13px 0 0;
-      color: #a3b1c2;
-      font-size: 9px
-    }
-
-    .scan-manual-row {
-      display: flex;
-      gap: 7px;
-      margin-top: 10px
-    }
-
-    .scan-manual-row input {
-      flex: 1;
-      min-width: 0;
-      height: 36px;
-      padding: 0 10px;
-      color: #f3f7fb;
-      background: #0a121e;
-      border: 1px solid #2a394e;
-      border-radius: 9px;
-      font-size: 11px;
-      outline: none
-    }
-
-    .scan-manual-row button {
-      height: 36px;
-      padding: 0 12px;
-      background: transparent;
-      border: 1px solid #315062;
-      border-radius: 9px;
-      color: var(--scan-teal);
-      font-size: 10px;
-      font-weight: 700
     }
 
     .scan-result-card {
@@ -1430,7 +1345,7 @@
     }
 
     .scan-camera-preview {
-      inset: calc(58px + env(safe-area-inset-top)) 0 calc(98px + env(safe-area-inset-bottom));
+      inset: calc(58px + env(safe-area-inset-top)) 0 0;
       background: #17231c
     }
 
@@ -1460,111 +1375,6 @@
       padding: 8px;
       border-radius: 10px;
       text-shadow: none
-    }
-
-    .scan-camera-panel {
-      padding: 13px 16px max(14px, env(safe-area-inset-bottom));
-      background: #fbfdfb;
-      border-color: var(--line);
-      box-shadow: 0 -8px 22px #1b3a2410
-    }
-
-    .scan-mode-tabs {
-      display: none
-    }
-
-    .scan-camera-help {
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 650
-    }
-
-    .scan-manual-row {
-      margin-top: 0
-    }
-
-    .scan-manual-row input {
-      height: 44px;
-      background: #fff;
-      border-color: #dfe8e1;
-      color: var(--ink);
-      font-size: 13px
-    }
-
-    .scan-manual-row input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px #16834a15
-    }
-
-    .scan-manual-row button {
-      height: 44px;
-      background: var(--green);
-      border-color: var(--green);
-      color: #fff;
-      padding: 0 16px;
-      font-size: 12px
-    }
-
-    .scan-camera-retry {
-      display: block;
-      width: 100%;
-      margin-top: 9px;
-      padding: 9px 12px;
-      border: 1px solid #dce9df;
-      border-radius: 10px;
-      background: #fff;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700
-    }
-
-    .scan-session-feed {
-      display: grid;
-      gap: 7px;
-      max-height: 150px;
-      overflow-y: auto;
-      margin: 9px 0;
-      overscroll-behavior: contain
-    }
-
-    .scan-session-entry {
-      padding: 9px 10px;
-      color: var(--ink);
-      background: #f1faf4;
-      border: 1px solid #dceee2;
-      border-radius: 10px;
-      font-size: 11px
-    }
-
-    .scan-session-entry strong,
-    .scan-session-entry small {
-      display: block
-    }
-
-    .scan-session-entry small {
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 10px;
-      overflow-wrap: anywhere
-    }
-
-    .scan-session-entry button {
-      margin-top: 7px;
-      padding: 6px 9px;
-      color: #fff;
-      background: var(--green);
-      border: 0;
-      border-radius: 8px;
-      font-size: 10px;
-      font-weight: 700
-    }
-
-    .scan-session-empty {
-      margin: 8px 0;
-      color: var(--muted);
-      font-size: 10px;
-      text-align: center
     }
 
     .scan-result-card,
@@ -2047,13 +1857,14 @@
 
     .modal-backdrop {
       position: fixed;
-      z-index: 20;
+      z-index: 35;
       inset: 0;
-      background: #12251b70;
+      background: #fbfdfb;
       display: none;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
-      padding: 16px
+      padding: 0;
+      overflow-y: auto
     }
 
     .modal-backdrop.show {
@@ -2062,12 +1873,14 @@
 
     .modal {
       width: min(520px, 100%);
+      min-height: 100vh;
+      min-height: 100dvh;
       background: #fbfdfb;
-      border-radius: 26px;
-      padding: 20px 18px 28px;
-      max-height: calc(100vh - 32px);
+      border-radius: 0;
+      padding: 22px 18px calc(28px + env(safe-area-inset-bottom));
+      max-height: none;
       overflow: auto;
-      box-shadow: 0 18px 48px rgba(14, 32, 20, .18)
+      box-shadow: none
     }
 
     .modal-head {
@@ -2686,14 +2499,6 @@
               class="scan-corner bl"></i><i class="scan-corner br"></i></div>
           <div class="scan-camera-message" id="scannerHint">Requesting camera access…</div>
         </div>
-        <div class="scan-camera-panel">
-          <div class="scan-camera-help" id="scanCameraHelp">Point the camera at a barcode or QR code</div>
-          <div class="scan-session-feed" id="scanSessionFeed" aria-live="polite"><div class="scan-session-empty">Scanned items will appear here</div></div>
-          <div class="scan-manual-row"><input id="manualBarcode" autocomplete="off" inputmode="text"
-              placeholder="Enter barcode or QR content"><button type="button"
-              onclick="submitManualBarcode()">Find</button></div>
-            <button class="scan-camera-retry" type="button" onclick="retryScannerCamera()">Start / restart camera</button>
-        </div>
       </section>
     </div>
   </div>
@@ -2727,7 +2532,6 @@
     let productDraftForBarcode = null;
     let purchaseBarcodeTargetId = null;
     let scannerReturnPage = 'sales';
-    let scannerSession = [];
     let scannerLastSeen = {};
     let scannerLastActiveCode = '';
     let scannerMissFrames = 0;
@@ -3181,7 +2985,7 @@
         document.getElementById('modalBackdrop').classList.remove('show'); scannerReturnPage = 'stock';
       }
       if (mode === 'purchaseNewProduct') scannerReturnPage = 'purchase';
-      barcodeScannerMode = mode; purchaseBarcodeTargetId = null; scannerSession = []; scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0;
+      barcodeScannerMode = mode; purchaseBarcodeTargetId = null; scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0;
       document.getElementById('scannerModule').hidden = false;
       document.getElementById('shopBottomNav').style.display = 'none';
       showScannerScreen('scanner'); startBarcodeScanner();
@@ -3193,15 +2997,8 @@
       } else if (mode === 'purchaseNewProduct') { scannerReturnPage = 'purchase'; purchaseBarcodeTargetId = targetId }
       else if (document.querySelector('.page.active')) scannerReturnPage = document.querySelector('.page.active').id.replace('Page', '');
       barcodeScannerMode = mode;
-      if (document.getElementById('scannerModule').hidden) { scannerSession = []; scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0 }
+      if (document.getElementById('scannerModule').hidden) { scannerLastSeen = {}; scannerLastActiveCode = ''; scannerMissFrames = 0 }
       document.getElementById('scannerModule').hidden = false; document.getElementById('shopBottomNav').style.display = 'none';
-      showScannerScreen('scanner');
-      startBarcodeScanner();
-    }
-    function retryScannerCamera() {
-      stopBarcodeScanner();
-      const module = document.getElementById('scannerModule');
-      module.hidden = false;
       showScannerScreen('scanner');
       startBarcodeScanner();
     }
@@ -3211,12 +3008,6 @@
       module.hidden = false;
       module.dataset.screen = 'scanner';
       document.getElementById('scanCameraScreen')?.classList.add('active');
-      updateScannerScanInstructions();
-      renderScannerSession();
-    }
-    function updateScannerScanInstructions() {
-      const help = document.getElementById('scanCameraHelp'); if (!help) return;
-      help.textContent = 'Point the camera at a barcode or QR code.';
     }
     async function startBarcodeScanner() {
       const hint = document.getElementById('scannerHint'), video = document.getElementById('barcodeVideo'), placeholder = document.getElementById('scannerPlaceholder');
@@ -3380,48 +3171,21 @@
       if (/^SMSTO:|^MATMSG:/i.test(text)) return { type: 'Message', valid: true };
       return { type: text ? 'Text' : 'Invalid QR content', valid: !!text };
     }
-    function addScannerSessionEntry(entry) {
-      scannerSession.unshift({ id: Date.now() + Math.floor(Math.random() * 100000), time: new Date().toISOString(), ...entry });
-      scannerSession = scannerSession.slice(0, 12);
-      renderScannerSession();
-    }
-    function renderScannerSession() {
-      const host = document.getElementById('scanSessionFeed');
-      if (!host) return;
-      if (!scannerSession.length) {
-        host.innerHTML = `<div class="scan-session-empty">${currentLanguage === 'en' ? 'Scanned items will appear here' : 'স্ক্যান করা পণ্য এখানে দেখা যাবে'}</div>`;
-        return;
-      }
-      const locale = currentLanguage === 'en' ? 'en-US' : 'bn-BD';
-      host.innerHTML = scannerSession.map(entry => {
-        const time = new Date(entry.time).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
-        if (entry.kind === 'product') return `<div class="scan-session-entry"><strong>✓ ${esc(entry.name)}</strong><small>${money(entry.price)} · ${currentLanguage === 'en' ? 'Added to sale' : 'বিক্রিতে যোগ হয়েছে'} · ${esc(time)}</small></div>`;
-        if (entry.kind === 'qr') return `<div class="scan-session-entry"><strong>${esc(entry.parsed?.type || 'QR code')}</strong><small>${esc(entry.value)} · ${esc(time)}</small><button type="button" data-copy-session="${entry.id}">${currentLanguage === 'en' ? 'Copy content' : 'কনটেন্ট কপি'}</button></div>`;
-        if (entry.kind === 'unknown') return `<div class="scan-session-entry"><strong>⚠ ${currentLanguage === 'en' ? 'Barcode not registered' : 'বারকোড নিবন্ধিত নয়'}</strong><small>${esc(entry.value)} · ${esc(time)}</small><button type="button" data-register-session="${entry.id}">${currentLanguage === 'en' ? 'Register product' : 'পণ্য নিবন্ধন'}</button><div id="scanRegistrationHost-${entry.id}"></div></div>`;
-        return `<div class="scan-session-entry"><strong>${esc(entry.name || entry.value || '')}</strong><small>${esc(entry.message || '')} · ${esc(time)}</small></div>`;
-      }).join('');
-      host.querySelectorAll('[data-copy-session]').forEach(button => button.addEventListener('click', () => {
-        const entry = scannerSession.find(item => String(item.id) === button.dataset.copySession);
-        if (entry) copyText(entry.value);
-      }));
-      host.querySelectorAll('[data-register-session]').forEach(button => button.addEventListener('click', () => {
-        const entry = scannerSession.find(item => String(item.id) === button.dataset.registerSession);
-        if (!entry) return;
-        scannerResult = { kind: 'barcode', value: entry.value, found: false };
-        showRegistrationForm(entry.id);
-      }));
-    }
     function processBarcode(value, format = '', preview = '') {
       const code = String(value || '').trim(); if (!code) return;
+      if (barcodeScannerMode === 'product') {
+        productDraftForBarcode = { ...(productDraftForBarcode || {}), barcode: code };
+        scannerResult = { kind: 'barcode', value: code, format: format || 'Barcode', found: false, preview };
+        closeScannerModule();
+        return;
+      }
       const normalizedFormat = String(format || '').toLowerCase(); const isQr = normalizedFormat.includes('qr') || format === window.ZXing?.BarcodeFormat?.QR_CODE || barcodeScannerMode === 'qr' || /^WIFI:|^https?:\/\//i.test(code);
       if (isQr) {
         const parsed = parseQrContent(code);
         scannerResult = { kind: 'qr', value: code, format: format || 'QR Code', parsed, preview };
-        addScannerSessionEntry({ kind: 'qr', value: code, parsed });
-        setCameraMessage(currentLanguage === 'en' ? 'QR scanned. Keep scanning or copy it from the session list.' : 'QR স্ক্যান হয়েছে। স্ক্যান চালিয়ে যান অথবা তালিকা থেকে কপি করুন।');
+        setCameraMessage(currentLanguage === 'en' ? `${parsed.type} QR scanned.` : `${parsed.type} QR স্ক্যান হয়েছে।`);
         return;
       }
-      if (barcodeScannerMode === 'product') productDraftForBarcode = { ...(productDraftForBarcode || {}), barcode: code };
       const product = products.find(item => String(item.barcode || '').trim() === code) || null;
       if (product) {
         scannerResult = { kind: 'barcode', value: code, format: format || 'Barcode', product, found: true, preview, addedToSale: false };
@@ -3429,12 +3193,10 @@
           const cartQty = cart.reduce((sum, item) => sum + (item.id === product.id ? item.qty : 0), 0);
           if (product.stock <= 0 || cartQty >= product.stock) {
             setCameraMessage(currentLanguage === 'en' ? `${product.name} is out of stock. Keep scanning or enter another code.` : `${product.name}-এর স্টক নেই। অন্য পণ্য স্ক্যান করুন।`, true);
-            addScannerSessionEntry({ kind: 'warning', name: product.name, message: currentLanguage === 'en' ? 'Out of stock' : 'স্টক নেই' });
             return;
           }
           addToCart(product.id);
           scannerResult.addedToSale = true;
-          addScannerSessionEntry({ kind: 'product', name: product.name, price: product.price, productId: product.id });
           setCameraMessage(currentLanguage === 'en' ? `${product.name} added to sale. Scan another product.` : `${product.name} বিক্রির তালিকায় যোগ হয়েছে। আরেকটি পণ্য স্ক্যান করুন।`);
           showToast(`${product.name} added to sale · ${money(product.price)}`);
           return;
@@ -3443,20 +3205,27 @@
           useExistingProductForPurchase();
           return;
         }
-        addScannerSessionEntry({ kind: 'product', name: product.name, price: product.price, productId: product.id });
+        if (barcodeScannerMode === 'product') {
+          showToast(currentLanguage === 'en' ? 'This barcode is already registered to a product' : 'এই বারকোডটি আগে থেকেই একটি পণ্যে নিবন্ধিত');
+          closeScannerModule();
+          return;
+        }
         setCameraMessage(currentLanguage === 'en' ? `${product.name} is already registered. Scan another code.` : `${product.name} আগে থেকেই নিবন্ধিত। অন্য বারকোড স্ক্যান করুন।`, true);
         return;
       }
       scannerResult = { kind: 'barcode', value: code, format: format || 'Barcode', product: null, found: false, preview, addedToSale: false };
-      addScannerSessionEntry({ kind: 'unknown', value: code });
-      setCameraMessage(currentLanguage === 'en' ? 'Unregistered barcode. You can register it below and continue scanning.' : 'বারকোডটি নিবন্ধিত নয়। নিচে পণ্য নিবন্ধন করে স্ক্যান চালিয়ে যান।', true);
+      if (barcodeScannerMode === 'product') {
+        closeScannerModule();
+        return;
+      }
+      setCameraMessage(currentLanguage === 'en' ? 'Barcode not found. Keep scanning or enter another code.' : 'বারকোডটি পাওয়া যায়নি। স্ক্যান চালিয়ে যান অথবা অন্য কোড লিখুন।', true);
     }
     function safeProductImage(product) { const image = String(product?.image || product?.thumbnail || ''); return /^(https:\/\/|data:image\/)/i.test(image) ? image : '' }
     function productThumbMarkup(product) { const image = safeProductImage(product); return `<div class="scan-product-thumb">${image ? `<img src="${esc(image)}" alt="">` : esc(product?.emoji || '📦')}</div>` }
     function renderScanResult() {
       const host = document.getElementById('scanResultContent'), result = scannerResult; if (!host || !result) return;
       if (!result.found) {
-        host.innerHTML = `<div class="scan-not-found"><div class="scan-not-found-icon">!</div><h3>Product Not Found</h3><p>This code is not registered in your Mudi inventory. You can register it now, or use it in your purchase entry.</p><div class="scan-data-row">Barcode<strong>${esc(result.value)}</strong></div></div><button class="scan-result-main" type="button" onclick="showRegistrationForm()">＋ Register Product</button>${barcodeScannerMode === 'purchaseNewProduct' ? '<button class="scan-result-main" type="button" onclick="useBarcodeForPurchase()">Use Barcode in Purchase</button>' : ''}<div id="scanRegistrationHost"></div><div class="scan-more-label">More Options</div><div class="scan-options"><button class="scan-option" type="button" onclick="copyScanResult()">▣ &nbsp;Copy barcode<span>›</span></button><button class="scan-option" type="button" onclick="scanAgain()">⟳ &nbsp;Scan Again<span>›</span></button></div>`; return;
+        host.innerHTML = `<div class="scan-not-found"><div class="scan-not-found-icon">!</div><h3>Product Not Found</h3><p>This code is not registered in your Mudi inventory.</p><div class="scan-data-row">Barcode<strong>${esc(result.value)}</strong></div></div><div class="scan-more-label">More Options</div><div class="scan-options"><button class="scan-option" type="button" onclick="copyScanResult()">▣ &nbsp;Copy barcode<span>›</span></button><button class="scan-option" type="button" onclick="scanAgain()">⟳ &nbsp;Scan Again<span>›</span></button></div>`; return;
       }
       const p = result.product;
       const primaryAction = barcodeScannerMode === 'purchaseNewProduct' ? '<button class="scan-result-main" type="button" onclick="useExistingProductForPurchase()">＋ Add Existing Product to Purchase</button>' : `<button class="scan-result-main" type="button" onclick="addScannedProductToSale()">＋ ${result.addedToSale ? 'Add Another to Sale' : 'Add to Sale'}</button>`;
@@ -3481,39 +3250,6 @@
     function searchProductByBarcode() { const p = scannerResult?.product; if (!p) return; closeScannerModule(); showPage('stock'); const search = document.getElementById('stockSearch'); if (search) { search.value = p.name; renderStock() } }
     function scanAgain() { const mode = barcodeScannerMode; document.getElementById('scannerModule').hidden = false; showScannerScreen('scanner'); startBarcodeScanner(); }
     function useBarcodeForPurchase() { const target = document.getElementById(purchaseBarcodeTargetId); const input = target?.querySelector('[name="newBarcode"]'); if (input) input.value = scannerResult.value; closeScannerModule(); showPage('purchase'); showToast('Barcode added to purchase item') }
-    function showRegistrationForm(sessionId) {
-      const entry = scannerSession.find(item => String(item.id) === String(sessionId));
-      const host = document.getElementById(`scanRegistrationHost-${sessionId}`);
-      if (!entry || !host) return;
-      host.innerHTML = `<form class="scan-register-form" onsubmit="registerScannedProduct(event,${Number(sessionId)})"><div class="scan-field full"><label>Barcode</label><input name="barcode" value="${esc(entry.value)}" readonly></div><div class="scan-field full"><label>Product name</label><input name="name" required placeholder="Product name"></div><div class="scan-field"><label>Category</label><input name="category" required placeholder="e.g. Beverage"></div><div class="scan-field"><label>Unit</label><select name="unit"><option>pcs</option><option>pack</option><option>kg</option><option>L</option><option>bottle</option></select></div><div class="scan-field"><label>Purchase price (৳)</label><input name="cost" type="number" min="0" step="any" required></div><div class="scan-field"><label>Selling price (৳)</label><input name="price" type="number" min="0.01" step="any" required></div><div class="scan-field"><label>Available quantity</label><input name="stock" type="number" min="0" step="any" value="0" required></div><button class="scan-result-main full" type="submit">Save Product to Inventory</button></form>`;
-      host.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }
-    function registerScannedProduct(event, sessionId) {
-      event.preventDefault(); const data = new FormData(event.currentTarget), barcode = String(data.get('barcode') || '').trim();
-      const existing = products.find(p => String(p.barcode || '').trim() === barcode);
-      if (existing) {
-        scannerResult = { kind: 'barcode', value: barcode, format: 'Barcode', product: existing, found: true };
-        if (barcodeScannerMode === 'sale' && existing.stock > 0) addToCart(existing.id);
-        const scannedEntry = scannerSession.find(item => String(item.id) === String(sessionId));
-        if (scannedEntry) Object.assign(scannedEntry, { kind: 'product', name: existing.name, price: existing.price, productId: existing.id });
-        renderScannerSession();
-        showToast((currentLanguage === 'en' ? 'This barcode already belongs to ' : 'এই বারকোডটি আগে থেকেই আছে: ') + existing.name);
-        return;
-      }
-      const record = { id: Date.now(), name: String(data.get('name') || '').trim(), barcode, category: String(data.get('category') || '').trim(), unit: String(data.get('unit') || 'pcs'), cost: Number(data.get('cost')), price: Number(data.get('price')), stock: Number(data.get('stock')), emoji: '📦', notes: String(data.get('notes') || '') };
-      if (!record.name || !record.category || record.cost < 0 || record.price <= 0 || record.stock < 0) { showToast('Check all product details'); return }
-      const created = createProductRecord(record); save(); renderStock(); renderSaleProducts(); updateStats(); scannerResult = { kind: 'barcode', value: barcode, format: 'Barcode', product: created, found: true };
-      if (barcodeScannerMode === 'sale' && created.stock > 0) addToCart(created.id);
-      const scannedEntry = scannerSession.find(item => String(item.id) === String(sessionId));
-      if (scannedEntry) Object.assign(scannedEntry, { kind: 'product', name: created.name, price: created.price, productId: created.id, registered: true });
-      renderScannerSession();
-      showToast(currentLanguage === 'en' ? 'Product registered. Continue scanning.' : 'পণ্য নিবন্ধিত হয়েছে। স্ক্যান চালিয়ে যান।');
-      if (barcodeScannerMode === 'product') { productDraftForBarcode = null; barcodeScannerMode = 'sale'; }
-      if (barcodeScannerMode === 'purchaseNewProduct') {
-        const target = document.getElementById(purchaseBarcodeTargetId), mode = target?.querySelector('[name="productMode"]'), select = target?.querySelector('[name="productId"]');
-        if (target && mode && select) { translatePurchaseFormDynamic(); mode.value = 'existing'; togglePurchaseProductMode(target.id); select.value = String(created.id); updateExistingPurchaseCost(target.id); }
-      }
-    }
     function renderQrResult() {
       const host = document.getElementById('qrResultContent'), result = scannerResult; if (!host || !result) return; const parsed = result.parsed || parseQrContent(result.value);
       const qrPreview = result.preview ? `<img src="${esc(result.preview)}" alt="Captured QR scan preview" style="width:67px;height:67px;object-fit:cover;border-radius:8px;background:#fff">` : '<div class="scan-qr-art">▦</div>';
@@ -3528,7 +3264,6 @@
     function fallbackCopy(text) { const input = document.createElement('textarea'); input.value = text; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.select(); try { document.execCommand('copy'); showToast('Copied to clipboard') } catch (error) { showToast('Unable to copy text') } input.remove() }
     function copyScanResult() { if (!scannerResult) return; copyText(scannerResult.value) }
     async function shareScanResult() { if (!scannerResult) return; try { if (navigator.share) await navigator.share({ title: 'Scan result', text: scannerResult.value }); else copyScanResult() } catch (error) { if (error.name !== 'AbortError') copyScanResult() } }
-    function submitManualBarcode() { const value = document.getElementById('manualBarcode')?.value; if (!String(value || '').trim()) { setCameraMessage('Enter a barcode or QR value first.', true); return } const code = String(value).trim(); delete scannerLastSeen[code]; if (scannerLastActiveCode === code) scannerLastActiveCode = ''; handleScannerDetection(code, 'MANUAL') }
     function renderSaleProducts() {
       const q = (document.getElementById('saleSearch')?.value || '').trim().toLowerCase();
       const soldQuantities = sales.reduce((totals, sale) => {
